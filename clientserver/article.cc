@@ -1,8 +1,8 @@
 #include "article.h"
 
 Article::Article(int id, std::string title, std::string author, std::string content) : id(id), title(title), author(author), content(content) {
-  //Constructor
-
+  std::time_t now =  std::time(0);
+  creationDate = std::localtime(&now);
 }
 
 int Newsgroup::getId() {
