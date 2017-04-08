@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
 	}
-	
+
 	int port = -1;
 	try {
 		port = stoi(argv[1]);
@@ -45,13 +45,13 @@ int main(int argc, char* argv[]){
 		cerr << "Wrong port number. " << e.what() << endl;
 		exit(1);
 	}
-	
+
 	Server server(port);
 	if (!server.isReady()) {
 		cerr << "Server initialization error." << endl;
 		exit(1);
 	}
-	
+
 	while (true) {
 		auto conn = server.waitForActivity();
 		if (conn != nullptr) {
