@@ -18,6 +18,7 @@ bool Memdatabase::create_NG(std::string title){
 }
 
 bool Memdatabase::delete_NG(std::string title){
+	if (newsgroups.size() == 0) return false;
 	return true;
 }
 
@@ -32,6 +33,7 @@ bool Memdatabase::create_ART(std::string title, std::string text){
 }
 
 bool Memdatabase::delete_ART(std::string title){
+	if (newsgroups.size() == 0) return false;
 	return true;
 }
 
