@@ -23,8 +23,11 @@ all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
-myserver: myserver.o
-myclient: myclient.o
+myserver: myserver.o article.o newsgroup.o #database.o messageprotocol.o messagehandler.o
+
+myclient: myclient.o article.o newsgroup.o #messageprotocol.o messagehandler.o
+
+database.o:
 
 # Phony targets
 .PHONY: all clean
