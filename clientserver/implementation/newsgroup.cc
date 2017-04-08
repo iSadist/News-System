@@ -1,6 +1,6 @@
 #include "newsgroup.h"
 
-Newsgroup::Newsgroup(int uniqueId) : id(uniqueId), title(title) {
+Newsgroup::Newsgroup(int uniqueId, std::string title) : id(uniqueId), title(title) {
   std::time_t now =  std::time(0);
   creationDate = std::localtime(&now);
 }
@@ -15,14 +15,14 @@ std::string Newsgroup::getTitle() {
 
 std::string Newsgroup::getCreationDate() {
   std::string date = "";
-  date.append(1900 + creationDate->tm_year);
+  date.append(std::to_string(1900 + creationDate->tm_year));
   date.append("-");
-  date.append(1 + creationDate->tm_mon);
+  date.append(std::to_string(1 + creationDate->tm_mon));
   date.append("-");
-  date.append(1 + creationDate->tm_mday);
+  date.append(std::to_string(1 + creationDate->tm_mday));
   return date;
 }
 
-virtual Newsgroup::~Newsgroup() {
+Newsgroup::~Newsgroup() {
   delete creationDate;
 }

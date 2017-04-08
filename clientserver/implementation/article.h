@@ -1,7 +1,8 @@
 #ifndef ARTICLE_H
 #define ARTICLE_H
 
-
+#include <string>
+#include <ctime>
 
 class Article {
 private:

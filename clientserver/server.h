@@ -36,37 +36,37 @@ class Server {
 public:
 	/* Creates a server that listens to a port */
 	explicit Server(int port);
-	
+
 	/* Removes all registered connections */
 	virtual ~Server();
-	
+
 	/* Returns true if the server has been initialized correctly */
 	bool isReady() const;
-	
+
 	/* Waits for activity on the port. Returns a previously registered
 	   connection object if an existing client wishes to communicate,
 	   nullptr if a new client wishes to communicate */
 	std::shared_ptr<Connection> waitForActivity() const;
-	
+
 	/* Registers a new connection */
 	void registerConnection(const std::shared_ptr<Connection>& conn);
-	
+
 	/* Deregisters a connection */
 	void deregisterConnection(const std::shared_ptr<Connection>& conn);
-	
+
 	/* Servers cannot be copied */
 	Server(const Server&) = delete;
 	Server& operator=(const Server&) = delete;
 protected:
 	/* The number of the communication socket */
 	int my_socket;
-	
+
 	/* List of registered connections */
 	std::vector<std::shared_ptr<Connection>> connections;
-	
+
 	/* Socket for a connection waiting to be registered */
 	mutable int pending_socket;
-	
+
 	/* Prints error message and exita */
 	void error(const char* msg) const;
 };
