@@ -1,7 +1,7 @@
 #include "memdatabase.h"
 #include <string>
 
-Memdatabase::Memdatabase(){
+Memdatabase::Memdatabase() : ng_counter(0), art_counter(0){
 
 }
 
@@ -14,29 +14,57 @@ std::vector<Newsgroup> Memdatabase::list_NG(){
 }
 
 bool Memdatabase::create_NG(std::string title){
+	for (Newsgroup newsgroup : newsgroups){
+		if (newsgroup.getTitle() == title){
+			return false;
+		}
+	}
+	Newsgroup ng(ng_counter++, title);
+	newsgroups.push_back(ng);
 	return true;
 }
 
-bool Memdatabase::delete_NG(std::string title){
+bool Memdatabase::delete_NG(int ng_id){
+	if (newsgroups.size() == 0) return false;
+	auto itr = newsgroups.begin();
+	while (itr != newsgroups.end()){
+		if ((*itr).getId() == ng_id){
+			newsgroups.erase(itr);
+			return true;
+		}
+	itr++;
+	}
+	return false;
+}
+
+std::vector<Article> Memdatabase::list_ART(int ng_id){
+	for (auto newsgroup : newsgroups){
+		if (newsgroup.getId() == ng_id){
+			return newsgroup.getArticles();
+		}
+	}
+	return std::vector<Article>();
+}
+
+bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, std::string text){
+	Article art(art_counter++, title, author, text);
+	if (newsgroups.size() == 0) return false;
+	auto itr = newsgroups.begin();
+	while (itr != newsgroups.end()){
+		if ((*itr).getId() == ng_id){
+			newsgroups.at(newsgroups.end() - itr).addArticle(art);
+			return true;
+		}
+	itr++;
+	}
+	return false;
+}
+
+bool Memdatabase::delete_ART(int ng_id, int art_id){
 	if (newsgroups.size() == 0) return false;
 	return true;
 }
 
-/*Searches for the newsgroup with ng_title in newsgroup list and
-	returns its article list*/
-std::vector<Article> Memdatabase::list_ART(std::string ng_title){
-	return newsgroups[0].getArticles();
-}
-
-bool Memdatabase::create_ART(std::string title, std::string text){
-	return true;
-}
-
-bool Memdatabase::delete_ART(std::string title){
-	if (newsgroups.size() == 0) return false;
-	return true;
-}
-
-Article Memdatabase::get_ART(std::string title){
+Article Memdatabase::get_ART(int ng_id, int art_id){
 	return newsgroups[0].getArticles()[0];
 }
