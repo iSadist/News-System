@@ -21,11 +21,13 @@ bool Memdatabase::delete_NG(std::string title){
 	return true;
 }
 
-std::vector<Article> Memdatabase::list_ART(){
-	return articles;
+/*Searches for the newsgroup with ng_title in newsgroup list and
+	returns its article list*/
+std::vector<Article> Memdatabase::list_ART(std::string ng_title){
+	return newsgroups[0].getArticles();
 }
 
-bool Memdatabase::create_ART(std::string title){
+bool Memdatabase::create_ART(std::string title, std::string text){
 	return true;
 }
 
@@ -34,5 +36,5 @@ bool Memdatabase::delete_ART(std::string title){
 }
 
 Article Memdatabase::get_ART(std::string title){
-	return articles[0];
+	return newsgroups[0].getArticles()[0];
 }

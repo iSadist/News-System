@@ -3,6 +3,8 @@
 
 #include "database.h"
 
+/*Implementation of Database.h interface*/
+
 class Memdatabase : Database{
 
 public:
@@ -11,13 +13,12 @@ public:
 	std::vector<Newsgroup> list_NG();
 	bool create_NG(std::string title);
 	bool delete_NG(std::string title);
-	std::vector<Article> list_ART();
-	bool create_ART(std::string title);
+	std::vector<Article> list_ART(std::string ng_title);
+	bool create_ART(std::string title, std::string text);
 	bool delete_ART(std::string title);
 	Article get_ART(std::string title);
 
 private:
-	std::vector<Article> articles;
 	std::vector<Newsgroup> newsgroups;
 };
 
