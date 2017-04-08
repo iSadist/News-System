@@ -19,6 +19,7 @@ public:
 	std::string getTitle();
 	std::string getCreationDate();
 	std::vector<Article> getArticles();
+	void addArticle(Article article);
 	virtual ~Newsgroup ();
 };
 
