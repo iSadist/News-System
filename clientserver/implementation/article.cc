@@ -24,5 +24,5 @@ std::string Article::getCreationDate() {
 }
 
 Article::~Article() {
-  delete creationDate;
+
 }

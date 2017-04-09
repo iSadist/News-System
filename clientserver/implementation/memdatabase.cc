@@ -1,6 +1,7 @@
 #include "memdatabase.h"
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 Memdatabase::Memdatabase() : ng_counter(0), art_counter(0){
 
@@ -20,7 +21,7 @@ bool Memdatabase::create_NG(std::string title){
 			return false;
 		}
 	}
-	Newsgroup ng(ng_counter++, title);
+	Newsgroup ng(++ng_counter, title);
 	newsgroups.push_back(ng);
 	return true;
 }
@@ -48,7 +49,7 @@ std::vector<Article> Memdatabase::list_ART(int ng_id){
 }
 
 bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, std::string text){
-	Article art(art_counter++, title, author, text);
+	Article art(++art_counter, title, author, text);
 	if (newsgroups.size() == 0) return false;
 	auto itr = newsgroups.begin();
 	while (itr != newsgroups.end()){

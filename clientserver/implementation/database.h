@@ -23,7 +23,7 @@ public:
 
 	/*returns a vector containing all the article objects
 	in the specified newsgroup*/
-	virtual std::vector<Article> list_ART(std::string ng_title) = 0;
+	virtual std::vector<Article> list_ART(int ng_id) = 0;
 
 	/*creates an article in the specified newsgroup
 	from the given newsgroup id and article info*/

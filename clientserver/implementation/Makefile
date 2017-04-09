@@ -17,7 +17,7 @@ LDFLAGS   = -g -L..
 LDLIBS = -lclientserver
 
 # Targets
-PROGS = myserver myclient
+PROGS = myserver myclient dbtest
 
 all: $(PROGS)
 
@@ -26,6 +26,8 @@ all: $(PROGS)
 myserver: myserver.o article.o newsgroup.o memdatabase.o #sqldatabase.o messageprotocol.o messagehandler.o
 
 myclient: myclient.o article.o newsgroup.o #messageprotocol.o messagehandler.o
+
+dbtest: memdatabase.o newsgroup.o article.o
 
 database.o:
 

@@ -5,7 +5,7 @@
 
 /*Implementation of Database.h interface*/
 
-class Memdatabase : Database{
+class Memdatabase : public Database{
 
 public:
 	Memdatabase();

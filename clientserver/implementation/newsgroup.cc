@@ -28,18 +28,36 @@ std::vector<Article> Newsgroup::getArticles(){
 }
 
 Article Newsgroup::getArticle(int art_id){
-	return articles[0];
+	if (articles.size() == 0) return Article(-1,"null","null","null");
+
+	auto itr = articles.begin();
+	while (itr != articles.end()){
+		if ((*itr).getId() == art_id){
+			return *itr;
+		}
+	itr++;
+	}
+	return Article(-1,"null","null","null");
 }
 
-/*Checks name and adds articles or replaces text and creation date if article exists*/
 void Newsgroup::addArticle(Article article){
-
+	articles.push_back(article);
 }
 
 bool Newsgroup::removeArticle(int art_id){
-	return true;
+	if (articles.size() == 0) return false;
+
+	auto itr = articles.begin();
+	while (itr != articles.end()){
+		if ((*itr).getId() == art_id){
+			articles.erase(itr);
+			return true;
+		}
+	itr++;
+	}
+	return false;
 }
 
 Newsgroup::~Newsgroup() {
-	delete creationDate;
+
 }
