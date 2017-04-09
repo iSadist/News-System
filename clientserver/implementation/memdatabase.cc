@@ -63,9 +63,7 @@ bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, s
 
 bool Memdatabase::delete_ART(int ng_id, int art_id){
 	if (newsgroups.size() == 0) return false;
-
-	auto lambda = [ng_id](Newsgroup newsgroup) { return newsgroup.getId() == ng_id; };
-	auto it = std::find_if(newsgroups.begin(), newsgroups.end(), lambda);
+	auto it = get_NG_iterator(ng_id);
 	if (it != newsgroups.end()){
 		newsgroups.at(it - newsgroups.begin()).removeArticle(art_id);
 		return true;
