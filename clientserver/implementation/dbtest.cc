@@ -1,4 +1,5 @@
 #include "memdatabase.h"
+#include "article.h"
 
 #include <memory>
 #include <iostream>
@@ -12,16 +13,27 @@ int main(int argc, char* argv[]){
 	db = Memdatabase();
 
 	db.list_NG();
-	db.delete_ART(44, 22);
-	db.get_ART(22, 44);
+	std::cout << "deleting article: " << db.get_ART(22, 44).getId() << std::endl;
+
 	db.list_ART(3);
 
 	db.create_NG("Good News Group");
-	db.list_NG();
+	std::vector<Newsgroup> ngs = db.list_NG();
+	for (auto ng : ngs){
+		std::cout << ng.getTitle() << std::endl;
+	}
 	db.create_ART(1, "Today", "Marcel", "Sunday afternoon is pretty chill");
-	db.list_ART(1);
-	db.get_ART(1, 1);
-	db.delete_ART(1, 1);
+	std::vector<Article> arts = db.list_ART(1);;
+	for (auto art : arts){
+		std::cout << art.getTitle() << std::endl;
+	}
+
+	Article art = db.get_ART(1, 1);
+	std::cout << art.getId() << " " << art.getTitle() << " " << art.getAuthor()
+	<< " " << art.getContent() << std::endl;
+
+	std::cout << "deleting article: "<< db.delete_ART(1, 1) << std::endl;
+
 	std::cout << "No crashes while testing memory database, newsgroups and article classes" << std::endl;
 
 }
