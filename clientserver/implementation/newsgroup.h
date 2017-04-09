@@ -19,8 +19,9 @@ public:
 	std::string getTitle();
 	std::string getCreationDate();
 	std::vector<Article> getArticles();
-	Article getArticle(std::string title);
+	Article getArticle(int art_id);
 	void addArticle(Article article);
+	bool removeArticle(int art_id);
 	virtual ~Newsgroup ();
 };
 

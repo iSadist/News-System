@@ -27,13 +27,17 @@ std::vector<Article> Newsgroup::getArticles(){
 	return articles;
 }
 
-Article Newsgroup::getArticle(std::string title){
+Article Newsgroup::getArticle(int art_id){
 	return articles[0];
 }
 
 /*Checks name and adds articles or replaces text and creation date if article exists*/
 void Newsgroup::addArticle(Article article){
 
+}
+
+bool Newsgroup::removeArticle(int art_id){
+	return true;
 }
 
 Newsgroup::~Newsgroup() {

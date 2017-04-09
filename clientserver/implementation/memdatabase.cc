@@ -1,5 +1,6 @@
 #include "memdatabase.h"
 #include <string>
+#include <algorithm>
 
 Memdatabase::Memdatabase() : ng_counter(0), art_counter(0){
 
@@ -52,7 +53,7 @@ bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, s
 	auto itr = newsgroups.begin();
 	while (itr != newsgroups.end()){
 		if ((*itr).getId() == ng_id){
-			newsgroups.at(newsgroups.end() - itr).addArticle(art);
+			newsgroups.at(itr - newsgroups.begin()).addArticle(art);
 			return true;
 		}
 	itr++;
@@ -62,9 +63,30 @@ bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, s
 
 bool Memdatabase::delete_ART(int ng_id, int art_id){
 	if (newsgroups.size() == 0) return false;
-	return true;
+
+	auto lambda = [ng_id](Newsgroup newsgroup) { return newsgroup.getId() == ng_id; };
+	auto it = std::find_if(newsgroups.begin(), newsgroups.end(), lambda);
+	if (it != newsgroups.end()){
+		newsgroups.at(it - newsgroups.begin()).removeArticle(art_id);
+		return true;
+	}
+	return false;
 }
 
 Article Memdatabase::get_ART(int ng_id, int art_id){
-	return newsgroups[0].getArticles()[0];
+	auto it = get_NG_iterator(ng_id);
+	if (it != newsgroups.end()){
+		return newsgroups.at(it - newsgroups.begin()).getArticle(art_id);
+	}
+	return Article(-1,"null","null","null");
 }
+
+__gnu_cxx::__normal_iterator<Newsgroup*, std::vector<Newsgroup, std::allocator<Newsgroup> > >
+Memdatabase::get_NG_iterator(int ng_id){
+	auto lambda = [ng_id](Newsgroup newsgroup) { return newsgroup.getId() == ng_id; };
+	auto it = std::find_if(newsgroups.begin(), newsgroups.end(), lambda);
+	return it;
+}
+
+
+
