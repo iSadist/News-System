@@ -80,8 +80,6 @@ Article Memdatabase::get_ART(int ng_id, int art_id){
 	return Article(-1,"null","null","null");
 }
 
-//__gnu_cxx::__normal_iterator<Newsgroup*, std::vector<Newsgroup, std::allocator<Newsgroup> > >
-
 std::vector<Newsgroup>::iterator Memdatabase::get_NG_iterator(int ng_id){
 	auto lambda = [ng_id](Newsgroup newsgroup) { return newsgroup.getId() == ng_id; };
 	auto it = std::find_if(newsgroups.begin(), newsgroups.end(), lambda);

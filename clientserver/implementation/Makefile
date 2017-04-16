@@ -29,8 +29,6 @@ myclient: myclient.o article.o newsgroup.o #messageprotocol.o messagehandler.o
 
 dbtest: memdatabase.o newsgroup.o article.o
 
-database.o:
-
 # Phony targets
 .PHONY: all clean
 
