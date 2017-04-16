@@ -22,8 +22,8 @@ private:
 	std::vector<Newsgroup> newsgroups;
 	int ng_counter;
 	int art_counter;
-	__gnu_cxx::__normal_iterator<Newsgroup*, std::vector<Newsgroup, std::allocator<Newsgroup> > >
-	get_NG_iterator(int ng_id);
+	//__gnu_cxx::__normal_iterator<Newsgroup*, std::vector<Newsgroup, std::allocator<Newsgroup> > >
+	std::vector<Newsgroup>::iterator get_NG_iterator(int ng_id);
 };
 
 #endif
