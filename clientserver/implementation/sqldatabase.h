@@ -13,11 +13,15 @@ private:
 	char *sql;
 	const char* data = "Callback function called";
 
+	int article_counter;
+
+	bool prepareStatement(std::string sql);
+
 public:
 	Sqldatabase();
 	virtual ~Sqldatabase();
 
-	void open_connection();
+	bool open_connection(const std::string& filepath);
 	void close_connection();
 
 	bool create_NG(std::string title);
