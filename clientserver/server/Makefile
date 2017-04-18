@@ -14,10 +14,10 @@ LDFLAGS   = -g -L..
 
 
 # Libraries
-LDLIBS = -lclientserver
+LDLIBS = -lclientserver -lsqlite3
 
 # Targets
-PROGS = myserver myclient dbtest clienttest
+PROGS = myserver dbtest
 
 all: $(PROGS)
 
@@ -25,11 +25,8 @@ all: $(PROGS)
 # The dependency on libclientserver.a is not defined.
 myserver: myserver.o article.o newsgroup.o memdatabase.o #sqldatabase.o messageprotocol.o messagehandler.o
 
-myclient: myclient.o article.o newsgroup.o #messageprotocol.o messagehandler.o
-
 dbtest: memdatabase.o sqldatabase.o newsgroup.o article.o
 
-clienttest: client.o
 
 # Phony targets
 .PHONY: all clean
