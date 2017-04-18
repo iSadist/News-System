@@ -8,13 +8,7 @@ class Sqldatabase : public Database {
 
 private:
 	sqlite3 *db;
-	char *zErrMsg = 0;
-	int rc;
-	char *sql;
-	const char* data = "Callback function called";
-
 	int article_counter;
-
 	bool prepareStatement(std::string sql);
 
 public:
@@ -24,6 +18,7 @@ public:
 	bool open_connection(const std::string& filepath);
 	void close_connection();
 
+	std::vector<Newsgroup> list_NG();
 	bool create_NG(std::string title);
 	bool delete_NG(int ng_id);
 	std::vector<Article> list_ART(int ng_id);

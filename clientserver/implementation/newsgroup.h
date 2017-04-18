@@ -15,6 +15,7 @@ private:
 
 public:
 	Newsgroup (int uniqueId, std::string title);
+	Newsgroup (int uniqueId, std::string title, std::tm *creation);
 	int getId();
 	std::string getTitle();
 	std::string getCreationDate();

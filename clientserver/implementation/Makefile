@@ -27,7 +27,7 @@ myserver: myserver.o article.o newsgroup.o memdatabase.o #sqldatabase.o messagep
 
 myclient: myclient.o article.o newsgroup.o #messageprotocol.o messagehandler.o
 
-dbtest: memdatabase.o newsgroup.o article.o
+dbtest: memdatabase.o sqldatabase.o newsgroup.o article.o
 
 # Phony targets
 .PHONY: all clean

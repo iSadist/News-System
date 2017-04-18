@@ -5,6 +5,8 @@ Newsgroup::Newsgroup(int uniqueId, std::string title) : id(uniqueId), title(titl
 	creationDate = std::localtime(&now);
 }
 
+Newsgroup::Newsgroup (int uniqueId, std::string title, std::tm *creation) : id(uniqueId), title(title), creationDate(creation) {}
+
 int Newsgroup::getId() {
 	return id;
 }

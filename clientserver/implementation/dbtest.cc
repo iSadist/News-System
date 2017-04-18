@@ -1,4 +1,5 @@
 #include "memdatabase.h"
+#include "sqldatabase.h"
 #include "article.h"
 
 #include <memory>
@@ -8,6 +9,7 @@
 using namespace std;
 
 Memdatabase db;
+Sqldatabase sql;
 
 int main(int argc, char* argv[]){
 	std::cout << "-----Test of Memdatabase, Newsgroup and Article classes-----" << std::endl;
