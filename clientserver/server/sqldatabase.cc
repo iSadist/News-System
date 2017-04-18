@@ -56,17 +56,17 @@ std::vector<Newsgroup> Sqldatabase::list_NG() {
 
     while (sqlite3_step(statement) == SQLITE_ROW) {
        int id = sqlite3_column_int(statement, 1);
-       std::string title = (char*)sqlite3_column_text(statement, 2);
-       std::string created = (char*)sqlite3_column_text(statement, 3);
+       std::string title(reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)));
+       std::string created(reinterpret_cast<const char*>(sqlite3_column_text(statement, 3)));
 
        std::string year = created.substr(0,4);
        std::string month = created.substr(4,2);
        std::string day = created.substr(7,2);
 
        std::tm *date;
-       date->tm_year = atoi(year.c_str());
-       date->tm_mon = atoi(month.c_str());
-       date->tm_mday = atoi(day.c_str());
+       date->tm_year = stoi(year);
+       date->tm_mon = stoi(month);
+       date->tm_mday = stoi(day);
 
        Newsgroup group(id, title, date);
        groups.push_back(group);
@@ -119,9 +119,9 @@ std::vector<Article> Sqldatabase::list_ART(int ng_id) {
 
     while (sqlite3_step(statement) == SQLITE_ROW) {
        int id = sqlite3_column_int(statement, 1);
-       std::string title = (char*)sqlite3_column_text(statement, 2);
-       std::string author = (char*)sqlite3_column_text(statement, 3);
-       std::string content = (char*)sqlite3_column_text(statement, 4);
+       std::string title(reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)));
+       std::string author(reinterpret_cast<const char*>(sqlite3_column_text(statement, 3)));
+       std::string content(reinterpret_cast<const char*>(sqlite3_column_text(statement, 4)));
        Article art(id, title, author,content);
        articles.push_back(art);
     }
@@ -173,9 +173,9 @@ Article Sqldatabase::get_ART(int ng_id, int art_id) {
 
     if (sqlite3_step(statement) == SQLITE_ROW) {
       int id = sqlite3_column_int(statement, 1);
-      std::string title = (char*)sqlite3_column_text(statement, 2);
-      std::string author = (char*)sqlite3_column_text(statement, 3);
-      std::string content = (char*)sqlite3_column_text(statement, 4);
+      std::string title(reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)));
+      std::string author(reinterpret_cast<const char*>(sqlite3_column_text(statement, 3)));
+      std::string content(reinterpret_cast<const char*>(sqlite3_column_text(statement, 4)));
       Article art(id, title, author,content);
       return art;
     }

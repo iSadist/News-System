@@ -8,13 +8,13 @@
 
 using namespace std;
 
-Memdatabase db;
-Sqldatabase sql;
+//Memdatabase db;
+Sqldatabase db;
 
 int main(int argc, char* argv[]){
 	std::cout << "-----Test of Memdatabase, Newsgroup and Article classes-----" << std::endl;
-	db = Memdatabase();
-
+	// db = Memdatabase();
+	db = Sqldatabase();
 	std::cout << "Listing newsgroups: " << std::endl;
 	std::vector<Newsgroup> ngs = db.list_NG();
 	for (auto ng : ngs){
