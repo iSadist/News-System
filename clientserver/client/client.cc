@@ -1,4 +1,5 @@
 #include "client.h"
+#include <iostream>
 
 Client::Client() {
 
@@ -45,6 +46,6 @@ void Client::switchServer() {
 }
 
 int main(int argc, char const *argv[]) {
-  /* code */
+  std::cout << "Hello World" << '\n';
   return 0;
 }

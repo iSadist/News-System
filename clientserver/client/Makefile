@@ -17,7 +17,7 @@ LDFLAGS   = -g -L..
 LDLIBS = -lclientserver
 
 # Targets
-PROGS = myserver myclient dbtest
+PROGS = myserver myclient dbtest clienttest
 
 all: $(PROGS)
 
@@ -28,6 +28,8 @@ myserver: myserver.o article.o newsgroup.o memdatabase.o #sqldatabase.o messagep
 myclient: myclient.o article.o newsgroup.o #messageprotocol.o messagehandler.o
 
 dbtest: memdatabase.o sqldatabase.o newsgroup.o article.o
+
+clienttest: client.o
 
 # Phony targets
 .PHONY: all clean

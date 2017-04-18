@@ -3,7 +3,7 @@
 
 #include "newsgroup.h"
 #include "article.h"
-#include "connection.h"
+#include "../connection.h"
 #include "database.h"
 #include "memdatabase.h"
 #include <string>
