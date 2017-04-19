@@ -2,6 +2,8 @@
 #define CLIENT_H
 
 #include "../connection.h"
+#include "../implementation/messagehandler.h"
+
 #include <string>
 
 class Client {
@@ -10,17 +12,22 @@ private:
   Server* server;
   int current_newsgroup;
 
+  void print_newsgroup_menu(int newsgroup_id);
+  void newsgroup_options(int newsgroup_id);
+  int scanInputInteger();
+
 public:
-  Client (); //Connect to server?
+  Client (const char* host, int port);
+  Client ();
   virtual ~Client ();
 
-  void changeToNewsgroup(int newsgroupId);
+  void changeToNewsgroup();
 
   void listNewsgroups();
-  void createNewsgroup(std::string title);
-  void deleteNewsgroup(std::string title);
+  void createNewsgroup();
+  void deleteNewsgroup();
 
-  void listArticles();
+  void listArticles(int newsgroup_id);
 
   void readArticle();
   void writeArticle();

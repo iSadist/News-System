@@ -15,7 +15,7 @@ Sqldatabase::Sqldatabase() {
   sqlite3_stmt *statement;
   std::string sql = "SELECT id FROM articles ORDER BY id DESC LIMIT 1";
   char *query = &sql[0];
-  if(sqlite3_prepare(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
+  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
     article_counter = sqlite3_column_int(statement, 0) + 1;
   } else {
     article_counter = 1;
@@ -24,6 +24,7 @@ Sqldatabase::Sqldatabase() {
 
 Sqldatabase::~Sqldatabase(){
   close_connection();
+  std::cout << "SQL Database closed..." << '\n';
 }
 
 bool Sqldatabase::prepareStatement(std::string sql) {
@@ -31,9 +32,8 @@ bool Sqldatabase::prepareStatement(std::string sql) {
   sqlite3_stmt *statement;
   int result;
 
-  if (sqlite3_prepare(db, query, -1, &statement, 0) == SQLITE_OK) {
+  if (sqlite3_prepare_v2(db, query, sql.size(), &statement, 0) == SQLITE_OK) {
     result = sqlite3_step(statement);
-    std::cout << sql << '\n';
     sqlite3_finalize(statement);
     if(result == SQLITE_DONE) {
        return true;
@@ -59,7 +59,7 @@ bool Sqldatabase::insertElement(std::string sql) {
 }
 
 bool Sqldatabase::open_connection(std::string filepath) {
-  if(sqlite3_open(filepath.c_str(), &db) == SQLITE_OK){ // std::string.c_string
+  if(sqlite3_open(filepath.c_str(), &db) == SQLITE_OK){
     fprintf(stderr, "Opened database successfully\n");
     return true;
   }else{
@@ -79,7 +79,7 @@ std::vector<Newsgroup> Sqldatabase::list_NG() {
   std::string sql = "SELECT * FROM newsgroups";
   char *query = &sql[0];
 
-  if(sqlite3_prepare(db, query, -1, &statement, 0) == SQLITE_OK) {
+  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK) {
 
     while (sqlite3_step(statement) == SQLITE_ROW) {
        int id = sqlite3_column_int(statement, 0);
@@ -148,7 +148,7 @@ std::vector<Article> Sqldatabase::list_ART(int ng_id) {
   std::string sql(s.str());
   char *query = &sql[0];
 
-  if(sqlite3_prepare(db, query, -1, &statement, 0) == SQLITE_OK) {
+  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK) {
 
     while (sqlite3_step(statement) == SQLITE_ROW) {
        int id = sqlite3_column_int(statement, 0);
@@ -169,14 +169,14 @@ bool Sqldatabase::create_ART(int ng_id, std::string title, std::string author, s
   s << "INSERT INTO articles (id, title, author, content, created) " <<
        "VALUES (" << article_counter << ", '" << title << "', '" << author << "', '" << text << "' , CURRENT_DATE)";
   std::string sql(s.str());
-  insertElement(sql);
+  prepareStatement(sql);
 
   //Adding article to newsgroup
   std::ostringstream t;
   t << "INSERT INTO contains VALUES ( " << article_counter << " ,  " << ng_id << ")";
   std::string sql2(t.str());
   article_counter++;
-  return insertElement(sql2);
+  return prepareStatement(sql2);
 }
 
 bool Sqldatabase::delete_ART(int ng_id, int art_id) {
@@ -201,7 +201,7 @@ Article Sqldatabase::get_ART(int ng_id, int art_id) {
 
   std::string sql(s.str());
   char *query = &sql[0];
-  if(sqlite3_prepare(db, query, -1, &statement, 0) == SQLITE_OK) {
+  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK) {
 
     if (sqlite3_step(statement) == SQLITE_ROW) {
       int id = sqlite3_column_int(statement, 0);
