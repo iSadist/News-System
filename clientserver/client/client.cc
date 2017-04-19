@@ -25,19 +25,19 @@ void Client::deleteNewsgroup(std::string title) {
 
 }
 
-void Client::listArticles(Newsgroup group) {
+void Client::listArticles() {
 
 }
 
-void Client::readArticle(Newsgroup group, Article article) {
+void Client::readArticle() {
 
 }
 
-void Client::writeArticle(Newsgroup group, std::string text) {
+void Client::writeArticle() {
 
 }
 
-void Client::deleteArticle(Newsgroup group, Article article) {
+void Client::deleteArticle() {
 
 }
 
@@ -45,7 +45,32 @@ void Client::switchServer() {
 
 }
 
+void print_main_menu() {
+  std::cout << "Main Menu" << '\n'
+            << "----------------------------" << '\n'
+            << "1. List all Newsgroups" << '\n'
+            << "2. Create a Newsgroup" << '\n'
+            << "3. Delete a Newsgroup" << '\n'
+            << "4. Go to a Newsgroup" << '\n';
+}
+
+void print_newsgroup_menu() {
+  std::cout << "/* message */" << '\n';
+}
+
 int main(int argc, char const *argv[]) {
-  std::cout << "Hello World" << '\n';
+  Client client();
+
+  std::cout << "Welcome to Usenet News!" << '\n';
+
+  print_main_menu();
+
+  int main_choice;
+
+  std::cin >> main_choice;
+  std::cout << main_choice << '\n';
+
+
+
   return 0;
 }

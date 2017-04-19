@@ -1,18 +1,14 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include "newsgroup.h"
-#include "article.h"
 #include "../connection.h"
-#include "database.h"
-#include "memdatabase.h"
 #include <string>
 
 class Client {
 private:
-  Newsgroup* currentNewsgroup;
   Connection* conn;
   Server* server;
+  int current_newsgroup;
 
 public:
   Client (); //Connect to server?
@@ -24,11 +20,11 @@ public:
   void createNewsgroup(std::string title);
   void deleteNewsgroup(std::string title);
 
-  void listArticles(Newsgroup group);
+  void listArticles();
 
-  void readArticle(Newsgroup group, Article article);
-  void writeArticle(Newsgroup group, std::string text);
-  void deleteArticle(Newsgroup group, Article article);
+  void readArticle();
+  void writeArticle();
+  void deleteArticle();
 
   void switchServer();
 

@@ -13,7 +13,7 @@ CREATE TABLE newsgroups (
 );
 
 CREATE TABLE articles (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY,
   title TEXT NOT NULL,
   author TEXT NOT NULL,
   content TEXT NOT NULL,
@@ -33,10 +33,11 @@ INSERT INTO newsgroups (title, created) VALUES ("Politics", "2017-03-20");
 INSERT INTO newsgroups (title, created) VALUES ("Culture", "2017-01-26");
 INSERT INTO newsgroups (title, created) VALUES ("School", "2017-01-26");
 
-INSERT INTO articles (title, author, content, created) VALUES (1 , 'Life at LTH', 'Jan Svensson', 'Test test test', CURRENT_DATE);
-INSERT INTO articles (title, author, content, created) VALUES (2 , 'Test', 'Jan Svensson', 'Test test test test', CURRENT_DATE);
-INSERT INTO articles (title, author, content, created) VALUES (3 , 'Life after LTH', 'Jan Svensson', 'Sweeeeet', CURRENT_DATE);
-INSERT INTO articles (title, author, content, created) VALUES (4 , '...', 'Jan Svensson', 'esgrbedrshrerhTest test test', CURRENT_DATE);
+INSERT INTO articles (id, title, author, content, created) VALUES (1 , 'Life at LTH', 'Jan Svensson', 'Test test test', CURRENT_DATE);
+INSERT INTO articles (id, title, author, content, created) VALUES (2 , 'Test', 'Jan Svensson', 'Test test test test', CURRENT_DATE);
+INSERT INTO articles (id, title, author, content, created) VALUES (3 , 'Life after LTH', 'Jan Svensson', 'Sweeeeet', CURRENT_DATE);
+INSERT INTO articles (id, title, author, content, created) VALUES (4 , '...', 'Jan Svensson', 'esgrbedrshrerhTest test test', CURRENT_DATE);
 
 INSERT INTO contains VALUES (4,1);
+INSERT INTO contains VALUES (4,2);
 INSERT INTO contains VALUES (2,3);

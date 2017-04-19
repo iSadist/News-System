@@ -10,12 +10,13 @@ private:
 	sqlite3 *db;
 	int article_counter;
 	bool prepareStatement(std::string sql);
+	bool insertElement(std::string sql);
+	bool open_connection(std::string filename);
+	std::vector<std::vector<std::string> > query(char* query);
 
 public:
 	Sqldatabase();
 	virtual ~Sqldatabase();
-
-	bool open_connection(const std::string& filepath);
 	void close_connection();
 
 	std::vector<Newsgroup> list_NG();

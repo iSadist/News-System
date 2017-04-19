@@ -8,13 +8,13 @@
 
 using namespace std;
 
-//Memdatabase db;
 Sqldatabase db;
 
 int main(int argc, char* argv[]){
 	std::cout << "-----Test of Memdatabase, Newsgroup and Article classes-----" << std::endl;
 	// db = Memdatabase();
 	db = Sqldatabase();
+
 	std::cout << "Listing newsgroups: " << std::endl;
 	std::vector<Newsgroup> ngs = db.list_NG();
 	for (auto ng : ngs){
@@ -40,8 +40,10 @@ int main(int argc, char* argv[]){
 	}
 
 	std::cout << "Creating article Today in Good News and Tomorrow in Bad News: " << std::endl;
-	db.create_ART(1, "Today", "Marcel", "Sunday afternoon is pretty chill");
-	db.create_ART(2, "Tomorrow", "Lecram", "Monday morning sucks");
+	bool success = db.create_ART(1, "Today", "Marcel", "Sunday afternoon is pretty chill");
+	bool success2 = db.create_ART(2, "Tomorrow", "Lecram", "Monday morning sucks");
+	std::cout << success << success2 << '\n';
+
 	arts = db.list_ART(1);
 
 	std::cout << "Listing articles in newsgroup 1 (Good News Group) " << std::endl;
@@ -65,6 +67,7 @@ int main(int argc, char* argv[]){
 	std::cout << "Article: " << art.getId() << " " << art.getTitle() << " " << art.getAuthor()
 	<< " " << art.getContent() << " " << art.getCreationDate() << std::endl;
 
+	db.close_connection();
 	std::cout << "-----Test of Memdatabase, Newsgroup and Article classes completed-----" << std::endl;
 
 }
