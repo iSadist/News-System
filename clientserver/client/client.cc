@@ -33,6 +33,12 @@ int Client::scanInputInteger() {
   return value;
 }
 
+std::string Client::scanInputString() {
+  std::string text;
+  std::cin >> text;
+  return text;
+}
+
 void Client::changeToNewsgroup() {
   std::cout << "Newsgroup ID: ";
   int newsgroupId = scanInputInteger();
@@ -42,6 +48,7 @@ void Client::changeToNewsgroup() {
 void Client::newsgroup_options(int newsgroup_id) {
   print_newsgroup_menu(newsgroup_id);
   while(1) {
+    std::cout << "Enter: ";
     int choice = scanInputInteger();
 
     switch (choice) {
@@ -49,17 +56,22 @@ void Client::newsgroup_options(int newsgroup_id) {
         listArticles(newsgroup_id);
         break;
       case 2:
-
+        writeArticle(newsgroup_id);
         break;
       case 3:
-
+        readArticle(newsgroup_id);
         break;
       case 4:
-
+        deleteArticle(newsgroup_id);
         break;
       case 5:
-      default:
         std::cout << "Returning..." << '\n';
+        return;
+      case 6:
+        print_newsgroup_menu(newsgroup_id);
+        break;
+      default:
+        std::cout << "Not a valid choice... Returning..." << '\n';
         return;
     }
   }
@@ -68,33 +80,56 @@ void Client::newsgroup_options(int newsgroup_id) {
 void Client::listNewsgroups() {
   std::cout << "Available Newsgroups" << '\n';
   std::cout << "--------------------" << '\n';
+
+
 }
 
 void Client::createNewsgroup() {
   std::cout << "Title: ";
-  std::string title;
-  std::cin >> title;
+  std::string title = scanInputString();
+
+
 }
 
 void Client::deleteNewsgroup() {
   std::cout << "Title: ";
-  std::string title;
-  std::cin >> title;
+  std::string title = scanInputString();
+
+
 }
 
 void Client::listArticles(int newsgroup_id) {
-  std::cout << "Listing articles in newsgroup " << newsgroup_id << '\n';
+  std::cout << "Listing articles in Newsgroup Nr." << newsgroup_id << '\n';
+
+
+
+
+  std::cout << "End of list..." << '\n';
 }
 
-void Client::readArticle() {
+void Client::readArticle(int newsgroup_id) {
+  std::cout << "Article ID: ";
+  int article_id = scanInputInteger();
+
 
 }
 
-void Client::writeArticle() {
+void Client::writeArticle(int newsgroup_id) {
+  std::cout << "Title: ";
+  std::string title = scanInputString();
+  std::cout << '\n';
+  std::cout << "Article text: ";
+  std::string text = scanInputString();
 
+  std::cout << '\n';
+  std::cout << "Article:" << title << '\n';
+  std::cout << text << '\n';
 }
 
-void Client::deleteArticle() {
+void Client::deleteArticle(int newsgroup_id) {
+  std::cout << "Article ID: ";
+  int article_id = scanInputInteger();
+
 
 }
 
@@ -110,7 +145,7 @@ void Client::print_newsgroup_menu(int newsgroup_id) {
             << "3. Read an Article" << '\n'
             << "4. Delete an Article" << '\n'
             << "5. Back" << '\n'
-            << "Enter: ";
+            << "6. Print the menu" << '\n';
 }
 
 void print_main_menu() {
@@ -126,7 +161,6 @@ void print_main_menu() {
 
 
 int main(int argc, char const *argv[]) {
-  std::cout << argc << '\n';
   if (argc != 3) {
     cerr << "Usage: myclient host-name port-number" << endl;
     exit(1);
@@ -148,8 +182,7 @@ int main(int argc, char const *argv[]) {
   while (1) {
     print_main_menu();
 
-    std::cin >> main_choice;
-    std::cout << main_choice << '\n';
+    main_choice = client->scanInputInteger();
 
     switch (main_choice) {
       case 1:
