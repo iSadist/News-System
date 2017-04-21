@@ -24,7 +24,7 @@ all: $(PROGS)
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
 
-client: client.o#messageprotocol.o messagehandler.o
+client: client.o messagehandler.o
 
 # Phony targets
 .PHONY: all clean
