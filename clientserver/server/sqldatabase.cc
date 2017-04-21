@@ -27,37 +27,6 @@ Sqldatabase::~Sqldatabase(){
   std::cout << "SQL Database closed..." << '\n';
 }
 
-bool Sqldatabase::prepareStatement(std::string sql) {
-  char *query = &sql[0];
-  sqlite3_stmt *statement;
-  int result;
-
-  if (sqlite3_prepare_v2(db, query, sql.size(), &statement, 0) == SQLITE_OK) {
-    result = sqlite3_step(statement);
-    sqlite3_finalize(statement);
-    if(result == SQLITE_DONE) {
-       return true;
-     }
-  }
-  std::cout << "SQL failed: " << sql << '\n';
-  return false;
-}
-
-bool Sqldatabase::insertElement(std::string sql) {
-  char *query = &sql[0];
-  sqlite3_stmt *statement;
-  int result;
-  char *err_msg = 0;
-
-  result = sqlite3_exec(db, query, 0, 0, &err_msg);
-
-  if (result != SQLITE_OK) {
-    std::cout << "SQL failed: " << sql << '\n';
-    return false;
-  }
-  return true;
-}
-
 bool Sqldatabase::open_connection(std::string filepath) {
   if(sqlite3_open(filepath.c_str(), &db) == SQLITE_OK){
     fprintf(stderr, "Opened database successfully\n");
@@ -70,6 +39,42 @@ bool Sqldatabase::open_connection(std::string filepath) {
 
 void Sqldatabase::close_connection() {
   sqlite3_close(db);
+}
+
+bool Sqldatabase::prepareStatement(std::string sql) {
+  char *query = &sql[0];
+  sqlite3_stmt *statement;
+  int result;
+
+  if (sqlite3_prepare_v2(db, query, sql.size(), &statement, 0) == SQLITE_OK) {
+    result = sqlite3_step(statement);
+    sqlite3_finalize(statement);
+    if(result == SQLITE_DONE) {
+       return true;
+     }
+     else {
+       std::cout << "Could not complete the request: " << sql << '\n';
+       return false;
+     }
+  }
+  std::cout << "SQL failed: " << sql << '\n';
+  return false;
+}
+
+bool Sqldatabase::executeSQL(std::string sql) {
+  char *query = &sql[0];
+  sqlite3_stmt *statement;
+  int result;
+  char *err_msg = 0;
+
+  result = sqlite3_exec(db, query, 0, 0, &err_msg);
+
+  if (result != SQLITE_OK) {
+    std::cout << "SQL failed: " << sql << '\n';
+    std::cout << *err_msg << '\n';
+    return false;
+  }
+  return true;
 }
 
 std::vector<Newsgroup> Sqldatabase::list_NG() {
@@ -117,23 +122,15 @@ bool Sqldatabase::create_NG(std::string title) {
         "VALUES ('" << title << "', CURRENT_DATE)";
 
   std::string sql(s.str());
-  return prepareStatement(sql);
+  return executeSQL(sql);
 }
 
 bool Sqldatabase::delete_NG(int ng_id) {
-  //Delete relations
-  std::ostringstream s;
-  s << "DELETE FROM contains " <<
-       "WHERE       group_id = " << ng_id;
-  std::string sql(s.str());
-  prepareStatement(sql);
-
-  //Delete newsgroup
   std::ostringstream t;
   t << "DELETE FROM newsgroups " <<
        "WHERE id = " << ng_id;
   std::string sql2(t.str());
-  return prepareStatement(sql2);
+  return executeSQL(sql2);
 }
 
 std::vector<Article> Sqldatabase::list_ART(int ng_id) {
@@ -141,9 +138,7 @@ std::vector<Article> Sqldatabase::list_ART(int ng_id) {
   sqlite3_stmt *statement;
   std::ostringstream s;
   s << "SELECT id,title,author,content FROM articles " <<
-       "INNER JOIN contains " <<
-       "ON         id = article_id " <<
-       "WHERE      group_id = " << ng_id;
+       "WHERE      newsgroup = " << ng_id;
 
   std::string sql(s.str());
   char *query = &sql[0];
@@ -166,26 +161,20 @@ std::vector<Article> Sqldatabase::list_ART(int ng_id) {
 bool Sqldatabase::create_ART(int ng_id, std::string title, std::string author, std::string text) {
   //Creating article
   std::ostringstream s;
-  s << "INSERT INTO articles (id, title, author, content, created) " <<
-       "VALUES (" << article_counter << ", '" << title << "', '" << author << "', '" << text << "' , CURRENT_DATE)";
+  s << "INSERT INTO articles (id, title, author, content, created, newsgroup) " <<
+       "VALUES (" << article_counter << ", '" << title << "', '" << author << "', '" << text << "' , CURRENT_DATE, " << ng_id << ")";
   std::string sql(s.str());
-  prepareStatement(sql);
-
-  //Adding article to newsgroup
-  std::ostringstream t;
-  t << "INSERT INTO contains VALUES ( " << article_counter << " ,  " << ng_id << ")";
-  std::string sql2(t.str());
   article_counter++;
-  return prepareStatement(sql2);
+  return executeSQL(sql);
 }
 
 bool Sqldatabase::delete_ART(int ng_id, int art_id) {
   std::ostringstream s;
-  s << "DELETE FROM contains " <<
-       "WHERE       article_id = " << art_id <<
-       " AND        group_id = " << ng_id;
+  s << "DELETE FROM articles " <<
+       "WHERE       id = " << art_id <<
+       " AND        newsgroup = " << ng_id;
   std::string sql(s.str());
-  return prepareStatement(sql);
+  return executeSQL(sql);
 }
 
 Article Sqldatabase::get_ART(int ng_id, int art_id) {
@@ -194,10 +183,8 @@ Article Sqldatabase::get_ART(int ng_id, int art_id) {
   std::ostringstream s;
 
   s << "SELECT id,title,author,content FROM articles " <<
-       "INNER JOIN contains " <<
-       "ON         id = article_id " <<
-       "WHERE      group_id = " << ng_id <<
-       " AND       article_id = " << art_id;
+       "WHERE      newsgroup = " << ng_id <<
+       " AND       id = " << art_id;
 
   std::string sql(s.str());
   char *query = &sql[0];
