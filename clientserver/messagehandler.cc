@@ -34,7 +34,7 @@ void MessageHandler::writeNumber(const Connection& conn, int value) {
 	conn.write(value & 0xFF);
 }
 
-string MessageHandler::eadString(const Connection& conn) {
+string MessageHandler::readString(const Connection& conn) {
 	string s;
 	char ch;
 	while ((ch = conn.read()) != '$') {

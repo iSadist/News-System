@@ -10,7 +10,7 @@ using namespace std;
 
 Sqldatabase db;
 
-int main(int argc, char* argv[]){
+int main(){
 	std::cout << "-----Test of Memdatabase, Newsgroup and Article classes-----" << std::endl;
 	// db = Memdatabase();
 	db = Sqldatabase();

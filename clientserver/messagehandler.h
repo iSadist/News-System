@@ -2,6 +2,14 @@
 #define MESSAGE_HANDLER_H
 
 #include "protocol.h"
+#include "connection.h"
+#include "connectionclosedexception.h"
+
+#include <memory>
+#include <iostream>
+#include <string>
+#include <stdexcept>
+#include <cstdlib>
 
 using namespace std;
 
