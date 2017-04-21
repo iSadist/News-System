@@ -12,7 +12,6 @@ CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
 CXXFLAGS += -std=c++11
 LDFLAGS   = -g -L..
 
-
 # Libraries
 LDLIBS = -lclientserver
 
@@ -24,7 +23,7 @@ all: $(PROGS)
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
 
-client: client.o messagehandler.o
+client: client.o ../messagehandler.o
 
 # Phony targets
 .PHONY: all clean
