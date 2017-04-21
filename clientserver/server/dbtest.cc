@@ -8,12 +8,11 @@
 
 using namespace std;
 
-Sqldatabase db;
-
 int main(int argc, char* argv[]){
 	std::cout << "-----Test of Memdatabase, Newsgroup and Article classes-----" << std::endl;
 	// db = Memdatabase();
-	db = Sqldatabase();
+	Sqldatabase db = Sqldatabase();
+	// db = Sqldatabase();
 
 	std::cout << "Listing newsgroups: " << std::endl;
 	std::vector<Newsgroup> ngs = db.list_NG();

@@ -10,7 +10,7 @@ private:
 	sqlite3 *db;
 	int article_counter;
 	bool prepareStatement(std::string sql);
-	bool insertElement(std::string sql);
+	bool executeSQL(std::string sql);
 	bool open_connection(std::string filename);
 	std::vector<std::vector<std::string> > query(char* query);
 
