@@ -18,7 +18,7 @@ private:
   Connection* conn;
 
 public:
-  MessageHandler ();
+  MessageHandler (const Connection& conn);
   virtual ~MessageHandler ();
 
   //Server -> Client
@@ -26,9 +26,12 @@ public:
   void writeString(const shared_ptr<Connection>& conn, const string& s);
 
   //Client -> Server
-
   void writeNumber(const Connection& conn, int value);
   string readString(const Connection& conn);
+
+  void setConnection(const Connection* new_conn) {
+    conn = new_conn;
+  }
 
 };
 

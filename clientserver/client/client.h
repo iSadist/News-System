@@ -8,8 +8,7 @@
 
 class Client {
 private:
-  Connection* conn;
-  Server* server;
+  MessageHandler* message_handler;
   int current_newsgroup;
 
   void print_newsgroup_menu(int newsgroup_id);
@@ -33,8 +32,6 @@ public:
   void readArticle(int newsgroup_id);
   void writeArticle(int newsgroup_id);
   void deleteArticle(int newsgroup_id);
-
-  void switchServer();
 
 };
 

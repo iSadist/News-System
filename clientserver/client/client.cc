@@ -1,4 +1,6 @@
 #include "client.h"
+#include "../connection.h"
+#include "../messagehandler.h"
 
 #include <iostream>
 #include <string>
@@ -8,14 +10,14 @@
 using namespace std;
 
 Client::Client(const char* host, int port) {
-  // conn = new Connection(host, port);
+  conn = new Connection(host, port);
+  message_handler = new MessageHandler(conn);
 }
 
-Client::Client() {
-}
+Client::Client() {}
 
 Client::~Client() {
-  // delete conn;
+  delete conn;
 }
 
 int Client::scanInputInteger() {
@@ -133,10 +135,6 @@ void Client::deleteArticle(int newsgroup_id) {
 
 }
 
-void Client::switchServer() {
-
-}
-
 void Client::print_newsgroup_menu(int newsgroup_id) {
   std::cout << "You are inside Newsgroup Nr." << newsgroup_id << '\n'
             << "----------------------------" << '\n'
@@ -159,7 +157,6 @@ void print_main_menu() {
             << "Enter: ";
 }
 
-
 int main(int argc, char const *argv[]) {
   if (argc != 3) {
     cerr << "Usage: myclient host-name port-number" << endl;
@@ -174,7 +171,7 @@ int main(int argc, char const *argv[]) {
 		exit(1);
 	}
 
-  Client *client = new Client(argv[1], port);
+  Client client(argv[1], port);
 
   std::cout << "Welcome to Usenet News!" << '\n';
   int main_choice;
@@ -205,7 +202,5 @@ int main(int argc, char const *argv[]) {
         std::cout << "Not a valid choice" << '\n';
     }
   }
-
-  delete client;
   exit(1);
 }
