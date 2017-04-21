@@ -1,11 +1,9 @@
 #include "messagehandler.h"
 
-MessageHandler::MessageHandler(const char* host, int port) {
-  conn = new Connection(host, port);
+MessageHandler::MessageHandler() {
 }
 
 MessageHandler::~MessageHandler() {
-  delete conn;
 }
 
 //Server -> Client

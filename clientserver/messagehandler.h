@@ -15,10 +15,9 @@ using namespace std;
 
 class MessageHandler {
 private:
-  Connection* conn;
 
 public:
-  MessageHandler (const Connection& conn);
+  MessageHandler ();
   virtual ~MessageHandler ();
 
   //Server -> Client
@@ -29,9 +28,7 @@ public:
   void writeNumber(const Connection& conn, int value);
   string readString(const Connection& conn);
 
-  void setConnection(const Connection* new_conn) {
-    conn = new_conn;
-  }
+  void setConnection(const Connection* new_conn);
 
 };
 

@@ -9,7 +9,9 @@
 class Client {
 private:
   MessageHandler* message_handler;
+  Connection* conn;
   int current_newsgroup;
+
 
   void print_newsgroup_menu(int newsgroup_id);
   void newsgroup_options(int newsgroup_id);

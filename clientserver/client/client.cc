@@ -10,8 +10,8 @@
 using namespace std;
 
 Client::Client(const char* host, int port) {
+  message_handler = new MessageHandler();
   conn = new Connection(host, port);
-  message_handler = new MessageHandler(conn);
 }
 
 Client::Client() {}
@@ -179,24 +179,23 @@ int main(int argc, char const *argv[]) {
   while (1) {
     print_main_menu();
 
-    main_choice = client->scanInputInteger();
+    main_choice = client.scanInputInteger();
 
     switch (main_choice) {
       case 1:
-        client->listNewsgroups();
+        client.listNewsgroups();
         break;
       case 2:
-        client->createNewsgroup();
+        client.createNewsgroup();
         break;
       case 3:
-        client->deleteNewsgroup();
+        client.deleteNewsgroup();
         break;
       case 4:
-        client->changeToNewsgroup();
+        client.changeToNewsgroup();
         break;
       case 5:
         std::cout << "Goodbye!" << '\n';
-        delete client;
         exit(0);
       default:
         std::cout << "Not a valid choice" << '\n';
