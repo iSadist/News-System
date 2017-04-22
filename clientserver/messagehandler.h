@@ -21,6 +21,7 @@ private:
   int readNumber(const shared_ptr<Connection>& conn);
   string readString(const shared_ptr<Connection>& conn, int char_count);
   void writeString(const shared_ptr<Connection>& conn, const string& s);
+  int readCommand(const shared_ptr<Connection>& conn);
 
   //Client
   void writeNumber(const Connection& conn, int value);
@@ -31,8 +32,6 @@ private:
 public:
   MessageHandler ();
   virtual ~MessageHandler ();
-
-  int readCommand(const shared_ptr<Connection>& conn);
 
   //Server
   Message getMessage(const shared_ptr<Connection>& conn);
