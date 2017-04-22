@@ -24,7 +24,7 @@ private:
   //Client -> Server
   void writeString(const shared_ptr<Connection>& conn, const string& s);
   void writeNumber(const Connection& conn, int value);
-  string readString(const Connection& conn);
+  string readString(const Connection& conn, int char_count);
 
   string readString(const shared_ptr<Connection>& conn, int char_count);
 

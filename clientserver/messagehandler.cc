@@ -96,11 +96,13 @@ void MessageHandler::writeNumber(const Connection& conn, int value) {
 	conn.write(value & 0xFF);
 }
 
-string MessageHandler::readString(const Connection& conn) {
+string MessageHandler::readString(const Connection& conn, int char_count) {
 	string s;
 	char ch;
-	while ((ch = conn.read()) != '$') {
+	while (char_count > 0) {
+		ch = conn.read();
 		s += ch;
+		char_count--;
 	}
 	return s;
 }

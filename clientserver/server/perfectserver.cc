@@ -35,10 +35,11 @@ int main(int argc, char const *argv[]) {
 	}
 
 	while (true) {
+		Message msg;
 		auto conn = server.waitForActivity();
 		if (conn != nullptr) {
 			try {
-				string msg = msg_hand.getMessage(conn);
+				Message msg = msg_hand.getMessage(conn);
 
 				msg_hand.sendMessage(conn);
 			} catch (ConnectionClosedException&) {
