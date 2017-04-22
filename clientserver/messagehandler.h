@@ -17,16 +17,16 @@ using namespace std;
 
 class MessageHandler {
 private:
-  //Server -> Client
+  //Server
   int readNumber(const shared_ptr<Connection>& conn);
-  void writeString(const Connection& conn, string& s);
-
-  //Client -> Server
+  string readString(const shared_ptr<Connection>& conn, int char_count);
   void writeString(const shared_ptr<Connection>& conn, const string& s);
+
+  //Client
   void writeNumber(const Connection& conn, int value);
   string readString(const Connection& conn, int char_count);
+  void writeString(const Connection& conn, string& s);
 
-  string readString(const shared_ptr<Connection>& conn, int char_count);
 
 public:
   MessageHandler ();
@@ -34,11 +34,11 @@ public:
 
   int readCommand(const shared_ptr<Connection>& conn);
 
-  //Server -> Client
+  //Server
   Message getMessage(const shared_ptr<Connection>& conn);
   void sendMessage(const shared_ptr<Connection>& conn);
 
-  //Client -> Server
+  //Client
   vector<pair<int, string>> clientListNewsgroups(const Connection& conn) const;
   int clientCreateNewsgroup(const Connection& conn, string title);
   int clientDeleteNewsgroup(const Connection& conn, int ng_id);
