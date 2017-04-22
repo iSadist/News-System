@@ -63,7 +63,6 @@ bool Sqldatabase::prepareStatement(std::string sql) {
 
 bool Sqldatabase::executeSQL(std::string sql) {
   char *query = &sql[0];
-  sqlite3_stmt *statement;
   int result;
   char *err_msg = 0;
 
