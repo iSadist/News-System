@@ -24,7 +24,6 @@ private:
   //Client -> Server
   void writeNumber(const Connection& conn, int value);
   string readString(const Connection& conn);
-  Message parseString(string msg);
 
 public:
   MessageHandler ();

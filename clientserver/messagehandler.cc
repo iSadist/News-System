@@ -3,16 +3,10 @@
 using namespace std;
 
 
-
-
 MessageHandler::MessageHandler() {
 }
 
 MessageHandler::~MessageHandler() {
-}
-
-string MessageHandler::parseString(string msg) {
-
 }
 
 //Server -> Client
@@ -74,14 +68,14 @@ vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& c
 
 }
 
-int MessageHandler::clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text) {
+int MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
 
 }
 
-int MessageHandler::clientDeleteArticle(const Connection& conn, ng_id, art_id) {
+int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
 
 }
 
-Article MessageHandler::clientGetArticle(const Connection& conn, ng_id, art_id) const {
+Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int art_id) const {
 
 }
