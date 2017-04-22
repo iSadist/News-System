@@ -101,29 +101,53 @@ string MessageHandler::readString(const Connection& conn) {
 }
 
 vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) const {
+	//Send request to server
+	string request = ""; //TODO
+	writeString(request);
 
+	//Receive result from server
+	vector<pair<int,string>> newsgroups;
+
+
+	string result =	readString(conn); //
+
+
+
+	for() {
+		pair<int,string> group = make_pair(id,title);
+		newsgroups.push_back(group);
+	}
+
+	return newsgroups;
 }
 
 int MessageHandler::clientCreateNewsgroup(const Connection& conn, string title) {
+	string request = ""; //TODO
+	writeString(request);
 
 }
 
 int MessageHandler::clientDeleteNewsgroup(const Connection& conn, int ng_id) {
-
+	string request = ""; //TODO
+	writeString(request);
 }
 
 vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& conn, int ng_id) const {
-
+	string request = ""; //TODO
+	writeString(request);
 }
 
-int MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
-
+int MessageHandler::clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text) {
+	string request = ""; //TODO
+	writeString(request);
 }
 
-int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
-
+int MessageHandler::clientDeleteArticle(const Connection& conn, ng_id, art_id) {
+	string request = ""; //TODO
+	writeString(request);
 }
 
-Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int art_id) const {
-
+Article MessageHandler::clientGetArticle(const Connection& conn, ng_id, art_id) const {
+	string request = ""; //TODO
+	writeString(request);
 }
