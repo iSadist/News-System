@@ -9,9 +9,11 @@
 class Message{
 
 public:
-	int type;
+
+	int type = -1;
 	std::vector<std::string> contents;
 
 };
+
 
 #endif

@@ -55,17 +55,15 @@ Message MessageHandler::getMessage(const shared_ptr<Connection>& conn){
 		case Protocol::COM_LIST_NG:
 			if (readCommand(conn) == Protocol::COM_END){
 				msg.type = Protocol::COM_LIST_NG;
-				return msg;
 			}
 			break;
 		case Protocol::COM_CREATE_NG:
-			msg.type = Protocol::COM_CREATE_NG;
 			if (readCommand(conn) == Protocol::PAR_STRING){
 				int char_count = readNumber(conn);
 				string ng_name = readString(conn, char_count);
 				if (readCommand(conn) == Protocol::COM_END){
+					msg.type = Protocol::COM_CREATE_NG;
 					msg.contents.push_back(ng_name);
-					return msg;
 				}
 			}
 			break;
