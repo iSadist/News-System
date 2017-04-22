@@ -6,7 +6,7 @@ CC  = g++
 
 # Define preprocessor, compiler, and linker flags. Uncomment the # lines
 # if you use clang++ and wish to use libc++ instead of libstd++.
-CPPFLAGS  = -std=c++11 -I..
+CPPFLAGS  = -std=c++11 -I.. -I../server
 CXXFLAGS  = -g -O2 -Wall -W -pedantic-errors
 CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
 CXXFLAGS += -std=c++11
@@ -23,7 +23,7 @@ all: $(PROGS)
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
 
-client: client.o ../messagehandler.o
+client: client.o
 
 # Phony targets
 .PHONY: all clean

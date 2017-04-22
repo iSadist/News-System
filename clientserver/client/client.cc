@@ -1,6 +1,6 @@
 #include "client.h"
-#include "../connection.h"
-#include "../messagehandler.h"
+#include "connection.h"
+#include "messagehandler.h"
 #include "protocol.h"
 #include "article.h"
 
