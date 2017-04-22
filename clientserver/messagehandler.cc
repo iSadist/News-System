@@ -25,10 +25,17 @@ int MessageHandler::readCommand(const shared_ptr<Connection>& conn) {
 }
 
 void MessageHandler::writeString(const shared_ptr<Connection>& conn, const string& s) {
+	conn->write(s.size());
 	for (char c : s) {
 		conn->write(c);
 	}
-	conn->write('$');
+}
+
+void MessageHandler::writeString(const Connection& conn, string& s) {
+	conn.write(s.size());
+	for (char c : s) {
+		conn.write(c);
+	}
 }
 
 string MessageHandler::readString(const shared_ptr<Connection>& conn, int char_count) {
@@ -103,51 +110,51 @@ string MessageHandler::readString(const Connection& conn) {
 vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) const {
 	//Send request to server
 	string request = ""; //TODO
-	writeString(request);
+	// writeString(conn, request);
 
 	//Receive result from server
 	vector<pair<int,string>> newsgroups;
 
 
-	string result =	readString(conn); //
+	// string result =	readString(conn); //
 
 
 
-	for() {
-		pair<int,string> group = make_pair(id,title);
-		newsgroups.push_back(group);
-	}
+	// for(int k=0; k<1; k++) {
+	// 	pair<int,string> group = make_pair(id,title);
+	// 	newsgroups.push_back(group);
+	// }
 
 	return newsgroups;
 }
 
 int MessageHandler::clientCreateNewsgroup(const Connection& conn, string title) {
 	string request = ""; //TODO
-	writeString(request);
+	writeString(conn, request);
 
 }
 
 int MessageHandler::clientDeleteNewsgroup(const Connection& conn, int ng_id) {
 	string request = ""; //TODO
-	writeString(request);
+	writeString(conn, request);
 }
 
-vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& conn, int ng_id) const {
+vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& conn, int ng_id){
 	string request = ""; //TODO
-	writeString(request);
+	writeString(conn, request);
 }
 
-int MessageHandler::clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text) {
+int MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
 	string request = ""; //TODO
-	writeString(request);
+	writeString(conn, request);
 }
 
-int MessageHandler::clientDeleteArticle(const Connection& conn, ng_id, art_id) {
+int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
 	string request = ""; //TODO
-	writeString(request);
+	writeString(conn, request);
 }
 
-Article MessageHandler::clientGetArticle(const Connection& conn, ng_id, art_id) const {
+Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int art_id){
 	string request = ""; //TODO
-	writeString(request);
+	writeString(conn, request);
 }

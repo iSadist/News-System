@@ -19,9 +19,10 @@ class MessageHandler {
 private:
   //Server -> Client
   int readNumber(const shared_ptr<Connection>& conn);
-  void writeString(const shared_ptr<Connection>& conn, const string& s);
+  void writeString(const Connection& conn, string& s);
 
   //Client -> Server
+  void writeString(const shared_ptr<Connection>& conn, const string& s);
   void writeNumber(const Connection& conn, int value);
   string readString(const Connection& conn);
 
@@ -41,10 +42,10 @@ public:
   vector<pair<int, string>> clientListNewsgroups(const Connection& conn) const;
   int clientCreateNewsgroup(const Connection& conn, string title);
   int clientDeleteNewsgroup(const Connection& conn, int ng_id);
-  vector<pair<int, string>> clientListArticles(const Connection& conn, int ng_id) const;
+  vector<pair<int, string>> clientListArticles(const Connection& conn, int ng_id);
   int clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text);
   int clientDeleteArticle(const Connection& conn, int ng_id, int art_id);
-  Article clientGetArticle(const Connection& conn, int ng_id, int art_id) const;
+  Article clientGetArticle(const Connection& conn, int ng_id, int art_id);
 
   void setConnection(const Connection* new_conn);
 };
