@@ -2,10 +2,17 @@
 
 using namespace std;
 
+
+
+
 MessageHandler::MessageHandler() {
 }
 
 MessageHandler::~MessageHandler() {
+}
+
+string MessageHandler::parseString(string msg) {
+
 }
 
 //Server -> Client
@@ -23,6 +30,14 @@ void MessageHandler::writeString(const shared_ptr<Connection>& conn, const strin
 		conn->write(c);
 	}
 	conn->write('$');
+}
+
+string MessageHandler::getMessage(const shared_ptr<Connection>& conn){
+	return "lol";
+}
+
+void MessageHandler::sendMessage(const shared_ptr<Connection>& conn){
+
 }
 
 //Client -> Server
@@ -43,10 +58,30 @@ string MessageHandler::readString(const Connection& conn) {
 	return s;
 }
 
-string MessageHandler::getMessage(const shared_ptr<Connection>& conn){
-	return "lol";
+vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) const {
+
 }
 
-void MessageHandler::sendMessage(const shared_ptr<Connection>& conn){
+int MessageHandler::clientCreateNewsgroup(const Connection& conn, string title) {
+
+}
+
+int MessageHandler::clientDeleteNewsgroup(const Connection& conn, int ng_id) {
+
+}
+
+vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& conn, int ng_id) const {
+
+}
+
+int MessageHandler::clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text) {
+
+}
+
+int MessageHandler::clientDeleteArticle(const Connection& conn, ng_id, art_id) {
+
+}
+
+Article MessageHandler::clientGetArticle(const Connection& conn, ng_id, art_id) const {
 
 }
