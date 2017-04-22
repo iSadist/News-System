@@ -4,6 +4,8 @@
 #include "protocol.h"
 #include "connection.h"
 #include "connectionclosedexception.h"
+#include "message.h"
+#include "article.h"
 
 #include <memory>
 #include <iostream>
@@ -22,6 +24,7 @@ private:
   //Client -> Server
   void writeNumber(const Connection& conn, int value);
   string readString(const Connection& conn);
+  Message parseString(string msg);
 
 public:
   MessageHandler ();
@@ -36,9 +39,9 @@ public:
   int clientCreateNewsgroup(const Connection& conn, string title);
   int clientDeleteNewsgroup(const Connection& conn, int ng_id);
   vector<pair<int, string>> clientListArticles(const Connection& conn, int ng_id) const;
-  int clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text);
-  int clientDeleteArticle(const Connection& conn, ng_id, art_id);
-  Article clientGetArticle(const Connection& conn, ng_id, art_id) const;
+  int clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text);
+  int clientDeleteArticle(const Connection& conn, int ng_id, int art_id);
+  Article clientGetArticle(const Connection& conn, int ng_id, int art_id) const;
 
   void setConnection(const Connection* new_conn);
 };

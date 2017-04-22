@@ -42,3 +42,11 @@ string MessageHandler::readString(const Connection& conn) {
 	}
 	return s;
 }
+
+string MessageHandler::getMessage(const shared_ptr<Connection>& conn){
+	return "lol";
+}
+
+void MessageHandler::sendMessage(const shared_ptr<Connection>& conn){
+
+}

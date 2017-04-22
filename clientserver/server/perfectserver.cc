@@ -2,6 +2,7 @@
 #include "server.h"
 #include "connection.h"
 #include "connectionclosedexception.h"
+#include "messagehandler.h"
 
 #include <memory>
 #include <iostream>
@@ -9,20 +10,7 @@
 #include <stdexcept>
 #include <cstdlib>
 
-int readNumber(const shared_ptr<Connection>& conn) {
-	unsigned char byte1 = conn->read();
-	unsigned char byte2 = conn->read();
-	unsigned char byte3 = conn->read();
-	unsigned char byte4 = conn->read();
-	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-}
-
-void writeString(const shared_ptr<Connection>& conn, const string& s) {
-	for (char c : s) {
-		conn->write(c);
-	}
-	conn->write('$');
-}
+using namespace std;
 
 int main(int argc, char const *argv[]) {
   if (argc != 2) {
@@ -39,6 +27,8 @@ int main(int argc, char const *argv[]) {
 	}
 
 	Server server(port);
+	MessageHandler msg_hand = MessageHandler();
+
 	if (!server.isReady()) {
 		cerr << "Server initialization error." << endl;
 		exit(1);
@@ -48,16 +38,9 @@ int main(int argc, char const *argv[]) {
 		auto conn = server.waitForActivity();
 		if (conn != nullptr) {
 			try {
-				int nbr = readNumber(conn);
-				string result;
-				if (nbr > 0) {
-					result = "positive";
-				} else if (nbr == 0) {
-					result = "zero";
-				} else {
-					result = "negative";
-				}
-				writeString(conn, result);
+				string msg = msg_hand.getMessage(conn);
+
+				msg_hand.sendMessage(conn);
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);
 				cout << "Client closed connection" << endl;
