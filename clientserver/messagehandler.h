@@ -33,11 +33,11 @@ public:
 
   //Client -> Server
   vector<pair<int, string>> clientListNewsgroups(const Connection& conn) const;
-  bool clientCreateNewsgroup(const Connection& conn, string title);
-  bool clientDeleteNewsgroup(const Connection& conn, int ng_id);
+  int clientCreateNewsgroup(const Connection& conn, string title);
+  int clientDeleteNewsgroup(const Connection& conn, int ng_id);
   vector<pair<int, string>> clientListArticles(const Connection& conn, int ng_id) const;
-  bool clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text);
-  bool clientDeleteArticle(const Connection& conn, ng_id, art_id);
+  int clientCreateArticle(const Connection& conn, ng_id, string title, string author, string text);
+  int clientDeleteArticle(const Connection& conn, ng_id, art_id);
   Article clientGetArticle(const Connection& conn, ng_id, art_id) const;
 
   void setConnection(const Connection* new_conn);
