@@ -1,5 +1,7 @@
 #include "messagehandler.h"
 
+using namespace std;
+
 MessageHandler::MessageHandler() {
 }
 
