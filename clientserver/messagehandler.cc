@@ -113,8 +113,17 @@ Message MessageHandler::getMessage(const shared_ptr<Connection>& conn){
 			}
 			break;
 		case Protocol::COM_GET_ART:
-			break;
-		case Protocol::COM_END:
+			if (readCommand(conn) == Protocol::PAR_NUM){
+				int ng_id = readNumber(conn);
+				if (readCommand(conn) == Protocol::PAR_NUM){
+					int art_id = readNumber(conn);
+					if (readCommand(conn) == Protocol::COM_END){
+						msg.type = Protocol::COM_GET_ART;
+						msg.contents.push_back(to_string(ng_id));
+						msg.contents.push_back(to_string(art_id));
+					}
+				}
+			}
 			break;
 	}
 	return msg;
