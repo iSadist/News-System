@@ -39,9 +39,9 @@ int main(int argc, char const *argv[]) {
 		auto conn = server.waitForActivity();
 		if (conn != nullptr) {
 			try {
-				Message msg = msg_hand.getMessage(conn);
+				Message msg = msg_hand.getMessage(*conn);
 
-				msg_hand.sendMessage(conn);
+				msg_hand.sendMessage(*conn);
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);
 				cout << "Client closed connection" << endl;

@@ -16,26 +16,25 @@
 using namespace std;
 
 class MessageHandler {
+
 private:
-  //Server
-  int readNumber(const shared_ptr<Connection>& conn);
-  string readString(const shared_ptr<Connection>& conn, int char_count);
-  void writeString(const shared_ptr<Connection>& conn, const string& s);
-  int readCommand(const shared_ptr<Connection>& conn);
+  //Shared internal functions
+  int readCommand(const Connection& conn);
 
-  //Client
+  int readNumber(const Connection& conn);
   void writeNumber(const Connection& conn, int value);
-  string readString(const Connection& conn, int char_count);
-  void writeString(const Connection& conn, string& s);
 
+  string readString(const Connection& conn, int char_count);
+  void writeString(const Connection& conn, const string& s);
+  void writeString(const Connection& conn, string& s);
 
 public:
   MessageHandler ();
   virtual ~MessageHandler ();
 
-  //Server
-  Message getMessage(const shared_ptr<Connection>& conn);
-  void sendMessage(const shared_ptr<Connection>& conn);
+  //Shared
+  Message getMessage(const Connection& conn);
+  void sendMessage(const Connection& conn);
 
   //Client
   vector<pair<int, string>> clientListNewsgroups(const Connection& conn) const;

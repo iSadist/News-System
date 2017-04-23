@@ -11,38 +11,52 @@ MessageHandler::~MessageHandler() {
 
 //Server -> Client
 
-int MessageHandler::readNumber(const shared_ptr<Connection>& conn) {
-	unsigned char byte1 = conn->read();
-	unsigned char byte2 = conn->read();
-	unsigned char byte3 = conn->read();
-	unsigned char byte4 = conn->read();
-	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-}
-
-int MessageHandler::readCommand(const shared_ptr<Connection>& conn) {
-	unsigned char byte1 = conn->read();
+int MessageHandler::readCommand(const Connection& conn) {
+	unsigned char byte1 = conn.read();
 	return byte1;
 }
 
-void MessageHandler::writeString(const shared_ptr<Connection>& conn, const string& s) {
-	conn->write(s.size());
-	for (char c : s) {
-		conn->write(c);
-	}
+int MessageHandler::readNumber(const Connection& conn) {
+	unsigned char byte1 = conn.read();
+	unsigned char byte2 = conn.read();
+	unsigned char byte3 = conn.read();
+	unsigned char byte4 = conn.read();
+	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
 }
 
-string MessageHandler::readString(const shared_ptr<Connection>& conn, int char_count) {
+void MessageHandler::writeNumber(const Connection& conn, int value) {
+	conn.write((value >> 24) & 0xFF);
+	conn.write((value >> 16) & 0xFF);
+	conn.write((value >> 8)	 & 0xFF);
+	conn.write(value & 0xFF);
+}
+
+string MessageHandler::readString(const Connection& conn, int char_count) {
 	string s;
 	char ch;
 	while (char_count > 0) {
-		ch = conn->read();
+		ch = conn.read();
 		s += ch;
 		char_count--;
 	}
 	return s;
 }
 
-Message MessageHandler::getMessage(const shared_ptr<Connection>& conn){
+void MessageHandler::writeString(const Connection& conn, const string& s) {
+	conn.write(s.size());
+	for (char c : s) {
+		conn.write(c);
+	}
+}
+
+void MessageHandler::writeString(const Connection& conn, string& s) {
+	conn.write(s.size());
+	for (char c : s) {
+		conn.write(c);
+	}
+}
+
+Message MessageHandler::getMessage(const Connection& conn){
 	Message msg;
 	switch (readCommand(conn)) {
 		case Protocol::COM_LIST_NG:
@@ -129,36 +143,11 @@ Message MessageHandler::getMessage(const shared_ptr<Connection>& conn){
 	return msg;
 }
 
-void MessageHandler::sendMessage(const shared_ptr<Connection>& conn){
+void MessageHandler::sendMessage(const Connection& conn){
 
 }
 
 //Client -> Server
-
-void MessageHandler::writeNumber(const Connection& conn, int value) {
-	conn.write((value >> 24) & 0xFF);
-	conn.write((value >> 16) & 0xFF);
-	conn.write((value >> 8)	 & 0xFF);
-	conn.write(value & 0xFF);
-}
-
-string MessageHandler::readString(const Connection& conn, int char_count) {
-	string s;
-	char ch;
-	while (char_count > 0) {
-		ch = conn.read();
-		s += ch;
-		char_count--;
-	}
-	return s;
-}
-
-void MessageHandler::writeString(const Connection& conn, string& s) {
-	conn.write(s.size());
-	for (char c : s) {
-		conn.write(c);
-	}
-}
 
 vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) const {
 	//Send request to server
