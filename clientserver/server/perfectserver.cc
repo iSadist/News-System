@@ -66,7 +66,6 @@ void PerfectServer::connection_control(){
 		try {
 			Message msg = msg_hand.getMessage(*conn);
 			handle_message(conn, msg);
-			// msg_hand.sendMessage(*conn,resp_msg);
 		} catch (ConnectionClosedException&) {
 			server.deregisterConnection(conn);
 			cout << "Client closed connection" << endl;

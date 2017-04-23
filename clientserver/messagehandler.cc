@@ -18,7 +18,6 @@ int MessageHandler::readCommand(const Connection& conn) {
 
 void MessageHandler::writeCommand(const Connection& conn, unsigned int byte) {
 	conn.write(byte);
-	cout << "Message Handler Writing Command: " << byte << endl;
 }
 
 int MessageHandler::readNumber(const Connection& conn) {
@@ -51,8 +50,13 @@ string MessageHandler::readString(const Connection& conn, int char_count) {
 
 void MessageHandler::writeString(const Connection& conn, string& s) {
 	conn.write(Protocol::PAR_STRING);
+	int value = s.size();
 
-	writeNumber(conn, s.size());
+	conn.write((value >> 24) & 0xFF);
+	conn.write((value >> 16) & 0xFF);
+	conn.write((value >> 8)	 & 0xFF);
+	conn.write(value & 0xFF);
+
 	for (char c : s) {
 		conn.write(c);
 	}
