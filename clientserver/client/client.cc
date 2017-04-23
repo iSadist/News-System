@@ -23,12 +23,14 @@ Client::~Client() {
 }
 
 int Client::scanInputInteger() {
+  string sValue;
   int value;
   bool ok = false;
 
   while(!ok) {
     try {
-      std::cin >> value;
+      std::cin >> sValue;
+      value = stoi(sValue);
     } catch (exception& e) {
       cerr << "Wrong input. " << e.what() << endl;
     }
