@@ -17,7 +17,7 @@ CXXFLAGS += -g
 #CPPFLAGS =  -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
 
-all: libclientserver.a
+all: clean libclientserver.a subpaths
 
 # Create the library; ranlib is for Darwin (OS X) and maybe other systems.
 # Doesn't seem to do any damage on other systems.
@@ -26,12 +26,18 @@ libclientserver.a: connection.o server.o messagehandler.o
 	ar rv libclientserver.a  connection.o server.o
 	ranlib libclientserver.a
 
+subpaths:
+	cd ./client && make clean && make && mv client ../bin/client
+	cd ./server && make clean && make && mv perfectserver ../bin/memoryserver
+	cd ./server && make clean && make db=-DSQL && mv perfectserver ../bin/sqlserver
+
 # Phony targets
 .PHONY: all clean
 
 # Standard clean
 clean:
-	rm -f *.o libclientserver.a
+	rm -rf *.o libclientserver.a bin
+	mkdir bin
 
 # Generate dependencies in *.d files
 %.d: %.cc

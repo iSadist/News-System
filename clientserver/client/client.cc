@@ -25,18 +25,17 @@ Client::~Client() {
 int Client::scanInputInteger() {
   string sValue;
   int value;
-  bool ok = false;
 
-  while(!ok) {
+  while(true) {
+    std::cin >> sValue;
     try {
-      std::cin >> sValue;
       value = stoi(sValue);
+      return value;
     } catch (exception& e) {
-      cerr << "Wrong input. " << e.what() << endl;
+      cerr << endl << "Invalid input, not an integer. "
+      << "Try again (0 displays menu)" << endl;
     }
-    ok = true;
   }
-  return value;
 }
 
 std::string Client::scanInputString() {
@@ -54,7 +53,7 @@ void Client::changeToNewsgroup() {
 void Client::newsgroup_options(int newsgroup_id) {
   print_newsgroup_menu(newsgroup_id);
   while(1) {
-    std::cout << "Enter: ";
+    std::cout << "Enter choice: ";
     int choice = scanInputInteger();
 
     switch (choice) {
@@ -128,9 +127,9 @@ void Client::readArticle(int newsgroup_id) {
   if(art.getId() != -1) {
     std::cout << "Title: " << art.getTitle() << '\n'
     << "Author: " << art.getAuthor() << '\n'
-    << "Date: " << art.getCreationDate() << '\n\n'
+    << "Date: " << art.getCreationDate() << "\n\n"
     << art.getContent() << '\n';
-  }          
+  }
 }
 
 void Client::writeArticle(int newsgroup_id) {
@@ -172,12 +171,12 @@ void print_main_menu() {
             << "3. Delete a Newsgroup" << '\n'
             << "4. Go to a Newsgroup" << '\n'
             << "5. Quit" << '\n'
-            << "Enter: ";
+            << "Enter choice: ";
 }
 
 int main(int argc, char const *argv[]) {
   if (argc != 3) {
-    cerr << "Usage: myclient host-name port-number" << endl;
+    cerr << "Usage: ./client host-name port-number" << endl;
     exit(1);
   }
 
@@ -213,10 +212,10 @@ int main(int argc, char const *argv[]) {
         client.changeToNewsgroup();
         break;
       case 5:
-        std::cout << "Goodbye!" << '\n';
+        std::cout << "Goodbye!" << endl;
         exit(0);
       default:
-        std::cout << "Not a valid choice" << '\n';
+        std::cout << "Not a valid choice" << endl;
     }
   }
   exit(1);

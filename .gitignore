@@ -28,8 +28,9 @@
 *.exe
 *.out
 *.app
-myclient
-myserver
+memoryserver
+sqlserver
 dbtest
 client
 perfectserver
+bin

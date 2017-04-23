@@ -79,7 +79,8 @@ void PerfectServer::connection_control(){
 
 int main(int argc, char const *argv[]) {
   	if (argc != 2) {
-		cerr << "Usage: myserver port-number" << endl;
+		cerr << "Usage: ./memoryserver port-number or" << endl
+		<< "./sqlserver port-number" << endl;
 		exit(1);
 	}
 

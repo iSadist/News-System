@@ -162,7 +162,7 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 	if (readCommand(conn) == Protocol::ANS_LIST_NG && readCommand(conn) == Protocol::PAR_NUM) {
 		int list_size = readNumber(conn);
 
-		for (size_t i = 0; i < list_size; i++) {
+		for (int i = 0; i < list_size; i++) {
 			int number;
 			string title;
 			int command = readCommand(conn);
@@ -268,7 +268,7 @@ vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& c
 				command = readCommand(conn);
 				if (command == Protocol::PAR_NUM) {
 					int size = readNumber(conn);
-					for (size_t i = 0; i < size; i++) {
+					for (int i = 0; i < size; i++) {
 						int number;
 						string title;
 
