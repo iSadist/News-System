@@ -442,7 +442,7 @@ void MessageHandler::server_send_ng_delete_response(const Connection& conn, bool
 
 void MessageHandler::server_send_ng_art_list(const Connection& conn, vector<Article> art_list){
 	writeCommand(conn, Protocol::ANS_LIST_ART);
-	if (art_list.size() == 0){
+	if (art_list.size() == 1 && art_list[0].getId() == 0){
 		writeCommand(conn, Protocol::ANS_NAK);
 		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);
 	} else {
@@ -468,27 +468,28 @@ void MessageHandler::server_send_art_create_response(const Connection& conn, boo
 	writeCommand(conn, Protocol::ANS_END);
 }
 
-
-/*THIS TWO FUNCTIONS NEED TO CLARIFY IF FAILURE IS BECAUSE UNEXISTING NG OR ARTICLE
-THIS NEEDS TO BE SOLVED IN database.h AS THE ERROR MUST BE CLEAR*/
-
-
-void MessageHandler::server_send_art_delete_response(const Connection& conn, bool success){
+void MessageHandler::server_send_art_delete_response(const Connection& conn, int success){
 	writeCommand(conn, Protocol::ANS_DELETE_ART);
-	if (success){
+	if (success == 1) {
 		writeCommand(conn, Protocol::ANS_ACK);
-	} else {
+	} else if (success == 0) {
 		writeCommand(conn, Protocol::ANS_NAK);
 		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);
+	} else if (success == -1) {
+		writeCommand(conn, Protocol::ANS_NAK);
+		writeCommand(conn, Protocol::ERR_ART_DOES_NOT_EXIST);
 	}
 	writeCommand(conn, Protocol::ANS_END);
 }
 
 void MessageHandler::server_send_article(const Connection& conn, Article art){
 	writeCommand(conn, Protocol::ANS_GET_ART);
-	if (art.getId() == -1) {
+	if (art.getId() == 0) {
 		writeCommand(conn, Protocol::ANS_NAK);
 		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);
+	} else if (art.getId() == -1) {
+		writeCommand(conn, Protocol::ANS_NAK);
+		writeCommand(conn, Protocol::ERR_ART_DOES_NOT_EXIST);
 	} else {
 		writeCommand(conn, Protocol::ANS_ACK);
 		string title = art.getTitle();

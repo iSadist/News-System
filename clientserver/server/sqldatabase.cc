@@ -132,6 +132,10 @@ bool Sqldatabase::delete_NG(int ng_id) {
   return executeSQL(sql2);
 }
 
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+THIS METHOD NEEDS TO RETURN A List with only one element:
+Article(0,"null","null","null") if the newsgroup (ng_id) is not found
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 std::vector<Article> Sqldatabase::list_ART(int ng_id) {
   std::vector<Article> articles;
   sqlite3_stmt *statement;
@@ -167,15 +171,25 @@ bool Sqldatabase::create_ART(int ng_id, std::string title, std::string author, s
   return executeSQL(sql);
 }
 
-bool Sqldatabase::delete_ART(int ng_id, int art_id) {
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\
+MUST BE FIXED TO RETURN 1 ON SUCCESS 0 ON NO SUCH NG_ID and -1 on NO SUCH ART_ID
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+int Sqldatabase::delete_ART(int ng_id, int art_id) {
   std::ostringstream s;
   s << "DELETE FROM articles " <<
        "WHERE       id = " << art_id <<
        " AND        newsgroup = " << ng_id;
   std::string sql(s.str());
-  return executeSQL(sql);
+//  return executeSQL(sql);
+  return -1;
 }
 
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+MUST BE FIXED SO RETURN ARTICLE ID IS 0 ON NO SUCH NG_ID and -1 on NO SUCH ART_ID
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 Article Sqldatabase::get_ART(int ng_id, int art_id) {
   sqlite3_stmt *statement;
 

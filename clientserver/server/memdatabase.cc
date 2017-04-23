@@ -45,7 +45,9 @@ std::vector<Article> Memdatabase::list_ART(int ng_id){
 			return newsgroup.getArticles();
 		}
 	}
-	return std::vector<Article>();
+	std::vector<Article> null_list;
+	null_list.push_back(Article(0,"null","null","null"));
+	return null_list;
 }
 
 bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, std::string text){
@@ -62,14 +64,18 @@ bool Memdatabase::create_ART(int ng_id, std::string title, std::string author, s
 	return false;
 }
 
-bool Memdatabase::delete_ART(int ng_id, int art_id){
-	if (newsgroups.size() == 0) return false;
+int Memdatabase::delete_ART(int ng_id, int art_id){
+	if (newsgroups.size() == 0) return 0;
 	auto it = get_NG_iterator(ng_id);
 	if (it != newsgroups.end()){
-		newsgroups.at(it - newsgroups.begin()).removeArticle(art_id);
-		return true;
+		bool success = newsgroups.at(it - newsgroups.begin()).removeArticle(art_id);
+		if (success){
+			return 1;
+		} else {
+			return -1;
+		}
 	}
-	return false;
+	return 0;
 }
 
 Article Memdatabase::get_ART(int ng_id, int art_id){
@@ -77,7 +83,7 @@ Article Memdatabase::get_ART(int ng_id, int art_id){
 	if (it != newsgroups.end()){
 		return newsgroups.at(it - newsgroups.begin()).getArticle(art_id);
 	}
-	return Article(-1,"null","null","null");
+	return Article(0,"null","null","null");
 }
 
 std::vector<Newsgroup>::iterator Memdatabase::get_NG_iterator(int ng_id){

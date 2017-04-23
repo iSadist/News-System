@@ -24,7 +24,7 @@ public:
 	bool delete_NG(int ng_id);
 	std::vector<Article> list_ART(int ng_id);
 	bool create_ART(int ng_id, std::string title, std::string author, std::string text);
-	bool delete_ART(int ng_id, int art_id);
+	int delete_ART(int ng_id, int art_id);
 	Article get_ART(int ng_id, int art_id);
 };
 
