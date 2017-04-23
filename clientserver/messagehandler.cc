@@ -16,6 +16,10 @@ int MessageHandler::readCommand(const Connection& conn) {
 	return byte1;
 }
 
+void MessageHandler::writeCommand(const Connection& conn, unsigned char byte) {
+	conn.write(byte);
+}
+
 int MessageHandler::readNumber(const Connection& conn) {
 	unsigned char byte1 = conn.read();
 	unsigned char byte2 = conn.read();
@@ -25,6 +29,8 @@ int MessageHandler::readNumber(const Connection& conn) {
 }
 
 void MessageHandler::writeNumber(const Connection& conn, int value) {
+	conn.write(Protocol::PAR_NUM);
+
 	conn.write((value >> 24) & 0xFF);
 	conn.write((value >> 16) & 0xFF);
 	conn.write((value >> 8)	 & 0xFF);
@@ -42,15 +48,10 @@ string MessageHandler::readString(const Connection& conn, int char_count) {
 	return s;
 }
 
-void MessageHandler::writeString(const Connection& conn, const string& s) {
-	conn.write(s.size());
-	for (char c : s) {
-		conn.write(c);
-	}
-}
-
 void MessageHandler::writeString(const Connection& conn, string& s) {
-	conn.write(s.size());
+	conn.write(Protocol::PAR_STRING);
+
+	writeNumber(conn, s.size());
 	for (char c : s) {
 		conn.write(c);
 	}
@@ -149,18 +150,13 @@ void MessageHandler::sendMessage(const Connection& conn){
 
 //Client -> Server
 
-vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) const {
+vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) {
 	//Send request to server
-	string request = ""; //TODO
-	// writeString(conn, request);
+	writeCommand(conn, Protocol::COM_LIST_NG);
+	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
 	vector<pair<int,string>> newsgroups;
-
-
-	// string result =	readString(conn); //
-
-
 
 	// for(int k=0; k<1; k++) {
 	// 	pair<int,string> group = make_pair(id,title);
@@ -171,32 +167,49 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 }
 
 int MessageHandler::clientCreateNewsgroup(const Connection& conn, string title) {
-	string request = ""; //TODO
-	writeString(conn, request);
+	//Send request to server
+	writeCommand(conn, Protocol::COM_CREATE_NG);
+	writeString(conn, title);
+	writeCommand(conn, Protocol::COM_END);
+
+	//Receive result from server
+
 
 }
 
 int MessageHandler::clientDeleteNewsgroup(const Connection& conn, int ng_id) {
-	string request = ""; //TODO
-	writeString(conn, request);
+	//Send request to server
+	writeCommand(conn, Protocol::COM_DELETE_NG);
+	writeNumber(conn, ng_id);
+	writeCommand(conn, Protocol::COM_END);
+
+	//Receive result from server
+
 }
 
 vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& conn, int ng_id){
-	string request = ""; //TODO
-	writeString(conn, request);
+	//Send request to server
+	writeCommand(conn, Protocol::ANS_LIST_ART);
+	writeNumber(conn, ng_id);
+	writeCommand(conn, Protocol::COM_END);
+
+	//Receive result from server
 }
 
 int MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
-	string request = ""; //TODO
-	writeString(conn, request);
+	//Send request to server
+	writeCommand(conn, Protocol::COM_CREATE_ART);
+	// writeNumber(conn, ng_id)
+
+	//Receive result from server
 }
 
 int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
-	string request = ""; //TODO
-	writeString(conn, request);
+	//Send request to server
+	//Receive result from server
 }
 
 Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int art_id){
-	string request = ""; //TODO
-	writeString(conn, request);
+	//Send request to server
+	//Receive result from server
 }

@@ -20,6 +20,7 @@ class MessageHandler {
 private:
   //Shared internal functions
   int readCommand(const Connection& conn);
+  void writeCommand(const Connection& conn, unsigned char byte);
 
   int readNumber(const Connection& conn);
   void writeNumber(const Connection& conn, int value);
@@ -37,7 +38,7 @@ public:
   void sendMessage(const Connection& conn);
 
   //Client
-  vector<pair<int, string>> clientListNewsgroups(const Connection& conn) const;
+  vector<pair<int, string>> clientListNewsgroups(const Connection& conn);
   int clientCreateNewsgroup(const Connection& conn, string title);
   int clientDeleteNewsgroup(const Connection& conn, int ng_id);
   vector<pair<int, string>> clientListArticles(const Connection& conn, int ng_id);
