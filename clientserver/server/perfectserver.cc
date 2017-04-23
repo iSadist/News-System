@@ -26,23 +26,23 @@ PerfectServer::PerfectServer(int port) : server(port){
 
 PerfectServer::~PerfectServer(){}
 
-Message PerfectServer::handle_message(Message& message){
-	Message resp;
+
+void PerfectServer::handle_message(shared_ptr<Connection>& conn, Message& message){
 	switch (message.type) {
 		case Protocol::COM_LIST_NG:
-			// db_sql.list_NG();
+			msg_hand.server_send_ng_list(*conn, db_sql.list_NG());
 			break;
 		case Protocol::COM_CREATE_NG:
-
+			msg_hand.server_send_ng_create_response(*conn, db_sql.create_NG(message.contents[0]));
 			break;
 		case Protocol::COM_DELETE_NG:
-
+			msg_hand.server_send_ng_delete_response(*conn, db_sql.delete_NG(stoi(message.contents[0])));
 			break;
 		case Protocol::COM_LIST_ART:
-
+			msg_hand.server_send_ng_art_list(*conn, db_sql.list_ART(stoi(message.contents[0])));
 			break;
 		case Protocol::COM_CREATE_ART:
-
+			msg_hand.server_send_art_create_response(*conn, db_sql.create_ART(stoi(message.contents[0]), message.contents[1], message.contents[2], message.contents[3]));
 			break;
 		case Protocol::COM_DELETE_ART:
 
@@ -50,8 +50,9 @@ Message PerfectServer::handle_message(Message& message){
 		case Protocol::COM_GET_ART:
 
 			break;
+		// case -1:
+		// 	server.deregisterConnection(conn);
 	}
-	return resp;
 }
 
 
@@ -60,7 +61,7 @@ void PerfectServer::connection_control(){
 	if (conn != nullptr) {
 		try {
 			Message msg = msg_hand.getMessage(*conn);
-			Message resp_msg = handle_message(msg);
+			handle_message(conn, msg);
 			// msg_hand.sendMessage(*conn,resp_msg);
 		} catch (ConnectionClosedException&) {
 			server.deregisterConnection(conn);

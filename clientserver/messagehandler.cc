@@ -403,3 +403,68 @@ Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int 
 	id = -1;
 	return Article(id, title, author, content);
 }
+
+
+
+
+
+void MessageHandler::server_send_ng_list(const Connection& conn, vector<Newsgroup> ng_list){
+	writeCommand(conn, Protocol::ANS_LIST_NG);
+	writeNumber(conn, ng_list.size());
+	for (Newsgroup ng : ng_list){
+		writeNumber(conn, ng.getId());
+		string ng_id = ng.getTitle();
+		writeString(conn, ng_id);
+	}
+	writeCommand(conn, Protocol::ANS_END);
+}
+
+void MessageHandler::server_send_ng_create_response(const Connection& conn, bool success){
+	writeCommand(conn, Protocol::ANS_CREATE_NG);
+	if (success){
+		writeCommand(conn, Protocol::ANS_ACK);
+	} else {
+		writeCommand(conn, Protocol::ANS_NAK);
+		writeCommand(conn, Protocol::ERR_NG_ALREADY_EXISTS);
+	}
+	writeCommand(conn, Protocol::ANS_END);
+}
+
+void MessageHandler::server_send_ng_delete_response(const Connection& conn, bool success){
+	writeCommand(conn, Protocol::ANS_CREATE_NG);
+	if (success){
+		writeCommand(conn, Protocol::ANS_ACK);
+	} else {
+		writeCommand(conn, Protocol::ANS_NAK);
+		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);
+	}
+	writeCommand(conn, Protocol::ANS_END);
+}
+
+void MessageHandler::server_send_ng_art_list(const Connection& conn, vector<Article> art_list){
+	writeCommand(conn, Protocol::ANS_LIST_ART);
+	if (art_list.size() == 0){
+		writeCommand(conn, Protocol::ANS_NAK);
+		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);
+	} else {
+		writeCommand(conn, Protocol::ANS_ACK);
+		writeNumber(conn, art_list.size());
+		for (Article art : art_list){
+			writeNumber(conn, art.getId());
+			string art_id = art.getTitle();
+			writeString(conn, art_id);
+		}
+	}
+	writeCommand(conn, Protocol::ANS_END);
+}
+
+void MessageHandler::server_send_art_create_response(const Connection& conn, bool success){
+	writeCommand(conn, Protocol::ANS_CREATE_ART);
+	if (success){
+		writeCommand(conn, Protocol::ANS_ACK);
+	} else {
+		writeCommand(conn, Protocol::ANS_NAK);
+		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);
+	}
+	writeCommand(conn, Protocol::ANS_END);
+}

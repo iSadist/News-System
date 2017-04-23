@@ -5,6 +5,7 @@
 #include "messagehandler.h"
 #include "sqldatabase.h"
 #include "memdatabase.h"
+#include <memory>
 
 class PerfectServer{
 private:
@@ -12,7 +13,8 @@ private:
 	MessageHandler msg_hand;
 	Sqldatabase db_sql;
 	Memdatabase db_mem;
-	Message handle_message(Message& message);
+	void handle_message(shared_ptr<Connection>& conn, Message& message);
+	// void handle_LIST_NG(Message& message);
 
 public:
 	PerfectServer(int port);
