@@ -47,15 +47,14 @@ public:
   void clientDeleteArticle(const Connection& conn, int ng_id, int art_id);
   Article clientGetArticle(const Connection& conn, int ng_id, int art_id);
 
-  void setConnection(const Connection* new_conn);
-
-
   //Server
   void server_send_ng_list(const Connection& conn, vector<Newsgroup> ng_list);
   void server_send_ng_create_response(const Connection& conn, bool success);
   void server_send_ng_delete_response(const Connection& conn, bool success);
   void server_send_ng_art_list(const Connection& conn, vector<Article> art_list);
   void server_send_art_create_response(const Connection& conn, bool success);
+  void server_send_art_delete_response(const Connection& conn, bool success);
+  void server_send_article(const Connection& conn, Article art);
 
 };
 

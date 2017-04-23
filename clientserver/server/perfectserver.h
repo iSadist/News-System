@@ -11,8 +11,11 @@ class PerfectServer{
 private:
 	Server server;
 	MessageHandler msg_hand;
-	Sqldatabase db_sql;
-	Memdatabase db_mem;
+	#ifdef SQL
+	Sqldatabase db;
+	#else
+	Memdatabase db;
+	#endif
 	void handle_message(shared_ptr<Connection>& conn, Message& message);
 	// void handle_LIST_NG(Message& message);
 
