@@ -199,17 +199,29 @@ vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& c
 int MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
 	//Send request to server
 	writeCommand(conn, Protocol::COM_CREATE_ART);
-	// writeNumber(conn, ng_id)
+	writeNumber(conn, ng_id);
+	writeString(conn, title);
+	writeString(conn, author);
+	writeString(conn, text);
 
 	//Receive result from server
 }
 
 int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
 	//Send request to server
+	writeCommand(conn, Protocol::COM_DELETE_ART);
+	writeNumber(conn, ng_id);
+	writeNumber(conn, art_id);
+	writeCommand(conn, Protocol::COM_END);
+
 	//Receive result from server
 }
 
 Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int art_id){
 	//Send request to server
+	writeCommand(conn, Protocol::COM_GET_ART);
+	writeNumber(conn, ng_id);
+	writeNumber(conn, art_id);
+
 	//Receive result from server
 }
