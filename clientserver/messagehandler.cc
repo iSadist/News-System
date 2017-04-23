@@ -18,6 +18,7 @@ int MessageHandler::readCommand(const Connection& conn) {
 
 void MessageHandler::writeCommand(const Connection& conn, unsigned char byte) {
 	conn.write(byte);
+	cout << "Message Handler Writing Command: " << byte << endl;
 }
 
 int MessageHandler::readNumber(const Connection& conn) {
@@ -425,7 +426,7 @@ void MessageHandler::server_send_ng_create_response(const Connection& conn, bool
 }
 
 void MessageHandler::server_send_ng_delete_response(const Connection& conn, bool success){
-	writeCommand(conn, Protocol::ANS_CREATE_NG);
+	writeCommand(conn, Protocol::ANS_DELETE_NG);
 	if (success){
 		writeCommand(conn, Protocol::ANS_ACK);
 	} else {
@@ -469,7 +470,7 @@ THIS NEEDS TO BE SOLVED IN database.h AS THE ERROR MUST BE CLEAR*/
 
 
 void MessageHandler::server_send_art_delete_response(const Connection& conn, bool success){
-	writeCommand(conn, Protocol::ANS_DELETE_NG);
+	writeCommand(conn, Protocol::ANS_DELETE_ART);
 	if (success){
 		writeCommand(conn, Protocol::ANS_ACK);
 	} else {
@@ -480,7 +481,7 @@ void MessageHandler::server_send_art_delete_response(const Connection& conn, boo
 }
 
 void MessageHandler::server_send_article(const Connection& conn, Article art){
-	writeCommand(conn, Protocol::ANS_CREATE_ART);
+	writeCommand(conn, Protocol::ANS_GET_ART);
 	if (art.getId() == -1) {
 		writeCommand(conn, Protocol::ANS_NAK);
 		writeCommand(conn, Protocol::ERR_NG_DOES_NOT_EXIST);

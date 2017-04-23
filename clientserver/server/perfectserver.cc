@@ -93,7 +93,7 @@ int main(int argc, char const *argv[]) {
 	}
 
 	PerfectServer myServerClient(port);
-
+	cout << "News Server running on port: " << port << endl;
 	while (true){
 		myServerClient.connection_control();
 	}
