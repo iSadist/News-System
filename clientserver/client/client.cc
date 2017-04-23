@@ -99,30 +99,14 @@ void Client::createNewsgroup() {
   std::cout << "Title: ";
   std::string title = scanInputString();
 
-  int result = message_handler->clientCreateNewsgroup(*conn, title);
-
-  if(result == 0) {
-    std::cout << "Newsgroup created successfully!" << '\n';
-  } else if (result == Protocol::ERR_NG_ALREADY_EXISTS) {
-    std::cout << "Failed... A Newsgroup with that title already exists!" << title << '\n';
-  } else {
-    std::cout << "Failed to created Newsgroup " << title << '\n';
-  }
+  message_handler->clientCreateNewsgroup(*conn, title);
 }
 
 void Client::deleteNewsgroup() {
   std::cout << "ID: ";
   int id = scanInputInteger();
 
-  int result = message_handler->clientDeleteNewsgroup(*conn, id);
-  if(result == 0) {
-    std::cout << "Newsgroup deleted successfully!" << '\n';
-  } else if (result == Protocol::ERR_NG_DOES_NOT_EXIST) {
-    std::cout << "Failed... No Newsgroup with that ID exists!" << '\n';
-  }
-  else {
-    std::cout << "Failed to delete Newsgroup Nr." << id << '\n';
-  }
+  message_handler->clientDeleteNewsgroup(*conn, id);
 }
 
 void Client::listArticles(int newsgroup_id) {
@@ -141,15 +125,12 @@ void Client::readArticle(int newsgroup_id) {
 
   Article art = message_handler->clientGetArticle(*conn, newsgroup_id, article_id);
 
-  if(art.getId() == -1) {
-    std::cout << "Failed! Article does not exist!" << '\n';
-    return;
-  }
-
-  std::cout << "Title: " << art.getTitle() << '\n'
-            << "Author: " << art.getAuthor() << '\n'
-            << "Date: " << art.getCreationDate() << '\n\n'
-            << art.getContent() << '\n';
+  if(art.getId() != -1) {
+    std::cout << "Title: " << art.getTitle() << '\n'
+    << "Author: " << art.getAuthor() << '\n'
+    << "Date: " << art.getCreationDate() << '\n\n'
+    << art.getContent() << '\n';
+  }          
 }
 
 void Client::writeArticle(int newsgroup_id) {
@@ -162,26 +143,14 @@ void Client::writeArticle(int newsgroup_id) {
   std::cout << "Article text: ";
   std::string text = scanInputString();
 
-  int result = message_handler->clientCreateArticle(*conn, newsgroup_id, title, author, text);
-
-  if (result == 0) {
-    std::cout << "Article created successfully!" << '\n';
-  } else {
-    std::cout << "Server failed to create Article..." << '\n';
-  }
+  message_handler->clientCreateArticle(*conn, newsgroup_id, title, author, text);
 }
 
 void Client::deleteArticle(int newsgroup_id) {
   std::cout << "Article ID: ";
   int article_id = scanInputInteger();
 
-  int result = message_handler->clientDeleteArticle(*conn, newsgroup_id, article_id);
-
-  if(result == 0) {
-    std::cout << "Article deleted successfully!" << '\n';
-  } else if (result == Protocol::ERR_ART_DOES_NOT_EXIST) {
-    std::cout << "Failed... Article does not exist with that ID" << '\n';
-  }
+  message_handler->clientDeleteArticle(*conn, newsgroup_id, article_id);
 }
 
 void Client::print_newsgroup_menu(int newsgroup_id) {

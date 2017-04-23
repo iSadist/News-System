@@ -158,56 +158,179 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 	//Receive result from server
 	vector<pair<int,string>> newsgroups;
 
-	// for(int k=0; k<1; k++) {
-	// 	pair<int,string> group = make_pair(id,title);
-	// 	newsgroups.push_back(group);
-	// }
+	if (readCommand(conn) == Protocol::ANS_LIST_NG && readCommand(conn) == Protocol::PAR_NUM) {
+		int list_size = readNumber(conn);
+
+		for (size_t i = 0; i < list_size; i++) {
+			int number;
+			string title;
+			int command = readCommand(conn);
+
+			if (command != Protocol::ANS_END) {
+				if (command == Protocol::PAR_NUM) {
+					number = readNumber(conn);
+					command = readCommand(conn);
+				}
+				if (command == Protocol::PAR_STRING) {
+					int size = readNumber(conn);
+					title = readString(conn, size);
+				}
+			}
+
+			pair<int,string> group = make_pair(number, title);
+			newsgroups.push_back(group);
+		}
+
+		if (readCommand(conn) != Protocol::ANS_END) {
+			return vector<pair<int,string>>();
+		}
+	}
+
+	if (readCommand(conn) != Protocol::ANS_END) {
+		std::cout << "Problem with message... terminating" << '\n';
+		exit(1);
+	}
 
 	return newsgroups;
 }
 
-int MessageHandler::clientCreateNewsgroup(const Connection& conn, string title) {
+void MessageHandler::clientCreateNewsgroup(const Connection& conn, string title) {
 	//Send request to server
 	writeCommand(conn, Protocol::COM_CREATE_NG);
 	writeString(conn, title);
 	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
-
-
+	if (readCommand(conn) == Protocol::ANS_CREATE_NG) {
+		int result = readCommand(conn);
+		if(result == Protocol::ANS_ACK) {
+	    std::cout << "Newsgroup created successfully!" << '\n';
+	  } else if (result == Protocol::ANS_NAK) {
+			if (readCommand(conn) == Protocol::ERR_NG_ALREADY_EXISTS) {
+				std::cout << "Failed... A Newsgroup with that title already exists!" << '\n';
+			}
+	  } else {
+	    std::cout << "Failed to created Newsgroup " << title << '\n';
+	  }
+	} else {
+		exit(1);
+	}
+	if (readCommand(conn) != Protocol::ANS_END) {
+		std::cout << "Problem with message... terminating" << '\n';
+		exit(1);
+	}
 }
 
-int MessageHandler::clientDeleteNewsgroup(const Connection& conn, int ng_id) {
+void MessageHandler::clientDeleteNewsgroup(const Connection& conn, int ng_id) {
 	//Send request to server
 	writeCommand(conn, Protocol::COM_DELETE_NG);
 	writeNumber(conn, ng_id);
 	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
-
+	if (readCommand(conn) == Protocol::ANS_DELETE_NG) {
+		int result = readCommand(conn);
+		if(result == Protocol::ANS_ACK) {
+	    std::cout << "Newsgroup deleted successfully!" << '\n';
+	  } else if (result == Protocol::ANS_NAK) {
+			if (readCommand(conn) == Protocol::ERR_NG_ALREADY_EXISTS) {
+				std::cout << "Failed... No Newsgroup with that ID exists!" << '\n';
+			}
+	  } else {
+	    std::cout << "Failed to delete Newsgroup Nr." << ng_id << '\n';
+	  }
+	} else {
+		exit(1);
+	}
+	if (readCommand(conn) != Protocol::ANS_END) {
+		std::cout << "Problem with message... terminating" << '\n';
+		exit(1);
+	}
 }
 
 vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& conn, int ng_id){
 	//Send request to server
-	writeCommand(conn, Protocol::ANS_LIST_ART);
+	writeCommand(conn, Protocol::COM_LIST_ART);
 	writeNumber(conn, ng_id);
 	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
+
+	vector<pair<int,string>> articles;
+
+	int command = readCommand(conn);
+
+	if (command == Protocol::ANS_LIST_ART) {
+		while (command != Protocol::ANS_END) {
+			command = readCommand(conn);
+			if (command == Protocol::ANS_ACK) {
+				command = readCommand(conn);
+				if (command == Protocol::PAR_NUM) {
+					int size = readNumber(conn);
+					for (size_t i = 0; i < size; i++) {
+						int number;
+						string title;
+
+						if (readCommand(conn) == Protocol::PAR_NUM) {
+							number = readNumber(conn);
+						}
+
+						if (readCommand(conn) == Protocol::PAR_STRING) {
+							int title_size = readNumber(conn);
+							title = readString(conn, title_size);
+						}
+
+						articles.push_back(make_pair(number, title));
+					}
+				}
+			} else {
+				command = readCommand(conn);
+				if (command == Protocol::ERR_NG_DOES_NOT_EXIST) {
+					std::cout << "Failed... No Newsgroup with that ID!" << '\n';
+					return vector<pair<int,string>>();
+				} else {
+					std::cout << "Unknown error. Terminating..." << '\n';
+					return vector<pair<int,string>>();
+				}
+			}
+		}
+	}
+
+	return articles;
 }
 
-int MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
+void MessageHandler::clientCreateArticle(const Connection& conn, int ng_id, string title, string author, string text) {
 	//Send request to server
 	writeCommand(conn, Protocol::COM_CREATE_ART);
 	writeNumber(conn, ng_id);
 	writeString(conn, title);
 	writeString(conn, author);
 	writeString(conn, text);
+	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
+	if (readCommand(conn) == Protocol::ANS_CREATE_ART) {
+		int result = readCommand(conn);
+		if(result == Protocol::ANS_ACK) {
+	    std::cout << "Article created successfully!" << '\n';
+	  } else if (result == Protocol::ANS_NAK) {
+			if (readCommand(conn) == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				std::cout << "Failed... No Newsgroup with that ID exists!" << '\n';
+			}
+	  } else {
+	    std::cout << "Failed to create Article" << '\n';
+	  }
+	} else {
+		exit(1);
+	}
+
+	if (readCommand(conn) != Protocol::ANS_END) {
+		std::cout << "Problem with message... terminating" << '\n';
+		exit(1);
+	}
 }
 
-int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
+void MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int art_id) {
 	//Send request to server
 	writeCommand(conn, Protocol::COM_DELETE_ART);
 	writeNumber(conn, ng_id);
@@ -215,6 +338,28 @@ int MessageHandler::clientDeleteArticle(const Connection& conn, int ng_id, int a
 	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
+	if (readCommand(conn) == Protocol::ANS_DELETE_ART) {
+		int result = readCommand(conn);
+		if(result == Protocol::ANS_ACK) {
+	    std::cout << "Article deleted successfully!" << '\n';
+	  } else if (result == Protocol::ANS_NAK) {
+			result = readCommand(conn);
+			if (result == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				std::cout << "Failed... No Newsgroup with that ID exists!" << '\n';
+			} else if (result == Protocol::ERR_ART_DOES_NOT_EXIST){
+				std::cout << "Failed... No Article with that ID exists!" << '\n';
+			}
+	  } else {
+	    std::cout << "Failed to delete Article" << '\n';
+	  }
+	} else {
+		exit(1);
+	}
+
+	if (readCommand(conn) != Protocol::ANS_END) {
+		std::cout << "Problem with message... terminating" << '\n';
+		exit(1);
+	}
 }
 
 Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int art_id){
@@ -222,6 +367,39 @@ Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int 
 	writeCommand(conn, Protocol::COM_GET_ART);
 	writeNumber(conn, ng_id);
 	writeNumber(conn, art_id);
+	writeCommand(conn, Protocol::COM_END);
 
 	//Receive result from server
+
+	int id;
+	string title;
+	string author;
+	string content;
+
+	if (readCommand(conn) == Protocol::ANS_GET_ART) {
+		id = 0;
+		int command = readCommand(conn);
+		if (command == Protocol::ANS_ACK) {
+			int size = readNumber(conn);
+			title = readString(conn, size);
+			size = readNumber(conn);
+			author = readString(conn, size);
+			size = readNumber(conn);
+			content = readString(conn, size);
+
+		} else if (command == Protocol::ANS_NAK) {
+			command = readCommand(conn);
+			if (command == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				std::cout << "Failed... No Newsgroup with that ID exists!" << '\n';
+			} else if(command == Protocol::ERR_ART_DOES_NOT_EXIST) {
+				std::cout << "Failed... No Article with that ID exists!" << '\n';
+			}
+		}
+		if (readCommand(conn) == Protocol::ANS_END) {
+				std::cout << "Problem with message... terminating" << '\n';
+				return Article(id, title, author, content);
+		}
+	}
+	id = -1;
+	return Article(id, title, author, content);
 }
