@@ -61,16 +61,69 @@ Message MessageHandler::getMessage(const shared_ptr<Connection>& conn){
 			}
 			break;
 		case Protocol::COM_DELETE_NG:
+			if (readCommand(conn) == Protocol::PAR_NUM){
+				int ng_id = readNumber(conn);
+				if (readCommand(conn) == Protocol::COM_END){
+					msg.type = Protocol::COM_DELETE_NG;
+					msg.contents.push_back(to_string(ng_id));
+				}
+			}
 			break;
 		case Protocol::COM_LIST_ART:
+			if (readCommand(conn) == Protocol::PAR_NUM){
+				int ng_id = readNumber(conn);
+				if (readCommand(conn) == Protocol::COM_END){
+					msg.type = Protocol::COM_LIST_ART;
+					msg.contents.push_back(to_string(ng_id));
+				}
+			}
 			break;
 		case Protocol::COM_CREATE_ART:
+			if (readCommand(conn) == Protocol::PAR_NUM){
+				int ng_id = readNumber(conn);
+				msg.contents.push_back(to_string(ng_id));
+				int char_count;
+				string art_name;
+				bool pass = true;
+				for (int k = 0; k < 3; k++){
+					if (readCommand(conn) == Protocol::PAR_STRING){
+						char_count = readNumber(conn);
+						art_name = readString(conn, char_count);
+						msg.contents.push_back(art_name);
+					}else{
+						pass = false;
+						break;
+					}
+				}
+				if (pass && readCommand(conn) == Protocol::COM_END)
+					msg.type = Protocol::COM_CREATE_ART;
+			}
 			break;
 		case Protocol::COM_DELETE_ART:
+			if (readCommand(conn) == Protocol::PAR_NUM){
+				int ng_id = readNumber(conn);
+				if (readCommand(conn) == Protocol::PAR_NUM){
+					int art_id = readNumber(conn);
+					if (readCommand(conn) == Protocol::COM_END){
+						msg.type = Protocol::COM_DELETE_ART;
+						msg.contents.push_back(to_string(ng_id));
+						msg.contents.push_back(to_string(art_id));
+					}
+				}
+			}
 			break;
 		case Protocol::COM_GET_ART:
-			break;
-		case Protocol::COM_END:
+			if (readCommand(conn) == Protocol::PAR_NUM){
+				int ng_id = readNumber(conn);
+				if (readCommand(conn) == Protocol::PAR_NUM){
+					int art_id = readNumber(conn);
+					if (readCommand(conn) == Protocol::COM_END){
+						msg.type = Protocol::COM_GET_ART;
+						msg.contents.push_back(to_string(ng_id));
+						msg.contents.push_back(to_string(art_id));
+					}
+				}
+			}
 			break;
 	}
 	return msg;
