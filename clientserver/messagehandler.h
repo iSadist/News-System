@@ -21,7 +21,7 @@ class MessageHandler {
 private:
   //Shared internal functions
   int readCommand(const Connection& conn);
-  void writeCommand(const Connection& conn, unsigned char byte);
+  void writeCommand(const Connection& conn, unsigned int byte);
 
   int readNumber(const Connection& conn);
   void writeNumber(const Connection& conn, int value);

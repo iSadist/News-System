@@ -16,7 +16,7 @@ int MessageHandler::readCommand(const Connection& conn) {
 	return byte1;
 }
 
-void MessageHandler::writeCommand(const Connection& conn, unsigned char byte) {
+void MessageHandler::writeCommand(const Connection& conn, unsigned int byte) {
 	conn.write(byte);
 	cout << "Message Handler Writing Command: " << byte << endl;
 }
