@@ -31,13 +31,6 @@ void MessageHandler::writeString(const shared_ptr<Connection>& conn, const strin
 	}
 }
 
-void MessageHandler::writeString(const Connection& conn, string& s) {
-	conn.write(s.size());
-	for (char c : s) {
-		conn.write(c);
-	}
-}
-
 string MessageHandler::readString(const shared_ptr<Connection>& conn, int char_count) {
 	string s;
 	char ch;
@@ -105,6 +98,13 @@ string MessageHandler::readString(const Connection& conn, int char_count) {
 		char_count--;
 	}
 	return s;
+}
+
+void MessageHandler::writeString(const Connection& conn, string& s) {
+	conn.write(s.size());
+	for (char c : s) {
+		conn.write(c);
+	}
 }
 
 vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection& conn) const {
