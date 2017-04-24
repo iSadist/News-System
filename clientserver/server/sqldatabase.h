@@ -12,6 +12,8 @@ private:
 	bool prepareStatement(std::string sql);
 	bool executeSQL(std::string sql);
 	std::vector<std::vector<std::string> > query(char* query);
+	bool groupExists(int ng_id);
+	bool articleExists(int ng_id, int art_id);
 
 public:
 	Sqldatabase();
