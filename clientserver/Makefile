@@ -30,6 +30,7 @@ subpaths:
 	cd ./client && make clean && make && mv client ../bin/client
 	cd ./server && make clean && make && mv perfectserver ../bin/memoryserver
 	cd ./server && make clean && make db=-DSQL && mv perfectserver ../bin/sqlserver
+	cd ./server && sqlite3 Database.db < SQLDatabase.sql && mv Database.db ../bin
 
 # Phony targets
 .PHONY: all clean
