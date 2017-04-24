@@ -12,7 +12,6 @@ Memdatabase::~Memdatabase(){
 }
 
 std::vector<Newsgroup> Memdatabase::list_NG(){
-	std::cout << "MEM: listing newsgroups" << '\n';
 	return newsgroups;
 }
 
@@ -24,7 +23,6 @@ bool Memdatabase::create_NG(std::string title){
 	}
 	Newsgroup ng(++ng_counter, title);
 	newsgroups.push_back(ng);
-	std::cout << "MEM: Newsgroup has been created" << '\n';
 	return true;
 }
 
