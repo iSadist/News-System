@@ -20,20 +20,23 @@ Sqldatabase::~Sqldatabase(){
 bool Sqldatabase::open_connection(std::string filepath) {
   if(sqlite3_open(filepath.c_str(), &db) == SQLITE_OK){
     fprintf(stderr, "Opened database successfully\n");
+
+    sqlite3_stmt *statement;
+    std::string sql = "SELECT id FROM articles ORDER BY id DESC LIMIT 1";
+    char *query = &sql[0];
+    if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
+      article_counter = sqlite3_column_int(statement, 0) + 1; // PROBLEM!
+      std::cout << article_counter << " articles counted" << '\n';
+    } else {
+      article_counter = 1;
+    }
+
     return true;
   }else{
     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
     return false;
   }
 
-  sqlite3_stmt *statement;
-  std::string sql = "SELECT id FROM articles ORDER BY id DESC LIMIT 1";
-  char *query = &sql[0];
-  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
-    article_counter = sqlite3_column_int(statement, 1) + 1;
-  } else {
-    article_counter = 1;
-  }
 }
 
 void Sqldatabase::close_connection() {
@@ -242,7 +245,10 @@ int Sqldatabase::delete_ART(int ng_id, int art_id) {
 MUST BE FIXED SO RETURN ARTICLE ID IS 0 ON NO SUCH NG_ID and -1 on NO SUCH ART_ID
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 Article Sqldatabase::get_ART(int ng_id, int art_id) {
+  std::cout << "SQL: Request received..." << '\n';
+
   if(!groupExists(ng_id)) {
+    std::cout << "SQL: Invalig group..." << '\n';
     return Article(0,"null","null","null");
   }
 
@@ -263,10 +269,11 @@ Article Sqldatabase::get_ART(int ng_id, int art_id) {
       std::string author(reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)));
       std::string content(reinterpret_cast<const char*>(sqlite3_column_text(statement, 3)));
       Article art(id, title, author,content);
+      std::cout << "SQL: Sending Article" << '\n';
       return art;
     }
   }
-
+  std::cout << "SQL: Invalig article..." << '\n';
   return Article(-1,"null","null","null");
 }
 

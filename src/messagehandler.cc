@@ -180,8 +180,6 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 				}
 			}
 
-			std::cout << "Number: " << number << " Title: " << title << '\n';
-
 			pair<int,string> group = make_pair(number, title);
 			newsgroups.push_back(group);
 		}
@@ -379,15 +377,31 @@ Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int 
 	string content;
 
 	if (readCommand(conn) == Protocol::ANS_GET_ART) {
+		std::cout << "HANDLER: Got an answer" << '\n';
 		id = 0;
 		int command = readCommand(conn);
 		if (command == Protocol::ANS_ACK) {
-			int size = readNumber(conn);
-			title = readString(conn, size);
-			size = readNumber(conn);
-			author = readString(conn, size);
-			size = readNumber(conn);
-			content = readString(conn, size);
+
+			if(readCommand(conn) == Protocol::PAR_STRING) {
+				int title_size = readNumber(conn);
+				title = readString(conn, title_size);
+				std::cout << "HANDLER: Title: " << title << '\n';
+			}
+			if(readCommand(conn) == Protocol::PAR_STRING) {
+				int author_size = readNumber(conn);
+				author = readString(conn, author_size);
+				std::cout << "HANDLER: Author: " << author << '\n';
+			}
+
+			if(readCommand(conn) == Protocol::PAR_STRING) {
+				int content_size = readNumber(conn);
+				content = readString(conn, content_size);
+				std::cout << "HANDLER: Content: " << content << '\n';
+			}
+
+			if (readCommand(conn) == Protocol::ANS_END) {
+				return Article(id, title, author, content);
+			}
 
 		} else if (command == Protocol::ANS_NAK) {
 			command = readCommand(conn);
@@ -397,16 +411,11 @@ Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int 
 				std::cout << "Failed... No Article with that ID exists!" << '\n';
 			}
 		}
-		if (readCommand(conn) == Protocol::ANS_END) {
-				std::cout << "Problem with message... terminating" << '\n';
-				return Article(id, title, author, content);
-		}
 	}
+	std::cout << "Problem with message... terminating" << '\n';
 	id = -1;
 	return Article(id, title, author, content);
 }
-
-
 
 void MessageHandler::server_send_ng_list(const Connection& conn, vector<Newsgroup> ng_list){
 	writeCommand(conn, Protocol::ANS_LIST_NG);
@@ -501,4 +510,5 @@ void MessageHandler::server_send_article(const Connection& conn, Article art){
 		writeString(conn, text);
 	}
 	writeCommand(conn, Protocol::ANS_END);
+	std::cout << "HANDLER: Article sent" << '\n';
 }
