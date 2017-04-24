@@ -154,6 +154,7 @@ void Client::deleteArticle(int newsgroup_id) {
 }
 
 void Client::print_newsgroup_menu(int newsgroup_id) {
+  std::cout << endl;
   std::cout << "You are inside Newsgroup Nr." << newsgroup_id << '\n'
             << "----------------------------" << '\n'
             << "1. List all Articles" << '\n'
@@ -165,6 +166,7 @@ void Client::print_newsgroup_menu(int newsgroup_id) {
 }
 
 void print_main_menu() {
+  std::cout << endl;
   std::cout << "Main Menu" << '\n'
             << "----------------------------" << '\n'
             << "1. List all Newsgroups" << '\n'
