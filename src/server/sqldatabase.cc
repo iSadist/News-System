@@ -242,16 +242,7 @@ int Sqldatabase::delete_ART(int ng_id, int art_id) {
 MUST BE FIXED SO RETURN ARTICLE ID IS 0 ON NO SUCH NG_ID and -1 on NO SUCH ART_ID
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 Article Sqldatabase::get_ART(int ng_id, int art_id) {
-  sqlite3_stmt *statement2;
-  std::ostringstream s2;
-
-  s2 << "SELECT * FROM newsgroups "
-     << "WHERE id = " << ng_id;
-
-  std::string sql2(s2.str());
-  char *query2 = &sql2[0];
-
-  if(sqlite3_prepare_v2(db, query2, -1, &statement2, 0) != SQLITE_OK) {
+  if(!groupExists(ng_id)) {
     return Article(0,"null","null","null");
   }
 
