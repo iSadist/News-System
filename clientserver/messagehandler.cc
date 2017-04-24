@@ -165,7 +165,7 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 		int list_size = readNumber(conn);
 
 		for (int i = 0; i < list_size; i++) {
-			int number;
+			int number = 0;
 			string title;
 			int command = readCommand(conn);
 
