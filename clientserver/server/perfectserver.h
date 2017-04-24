@@ -12,9 +12,9 @@ private:
 	Server server;
 	MessageHandler msg_hand;
 	#ifdef SQL
-	Sqldatabase db;
+	Sqldatabase* db;
 	#else
-	Memdatabase db;
+	Memdatabase* db;
 	#endif
 	void handle_message(shared_ptr<Connection>& conn, Message& message);
 	// void handle_LIST_NG(Message& message);

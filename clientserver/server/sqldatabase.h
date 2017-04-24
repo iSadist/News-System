@@ -11,12 +11,12 @@ private:
 	int article_counter;
 	bool prepareStatement(std::string sql);
 	bool executeSQL(std::string sql);
-	bool open_connection(std::string filename);
 	std::vector<std::vector<std::string> > query(char* query);
 
 public:
 	Sqldatabase();
 	virtual ~Sqldatabase();
+	bool open_connection(std::string filename);
 	void close_connection();
 
 	std::vector<Newsgroup> list_NG();

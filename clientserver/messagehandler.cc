@@ -160,6 +160,8 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 	vector<pair<int,string>> newsgroups;
 
 	if (readCommand(conn) == Protocol::ANS_LIST_NG && readCommand(conn) == Protocol::PAR_NUM) {
+
+
 		int list_size = readNumber(conn);
 
 		for (int i = 0; i < list_size; i++) {
@@ -178,18 +180,16 @@ vector<pair<int, string>> MessageHandler::clientListNewsgroups(const Connection&
 				}
 			}
 
+			std::cout << "Number: " << number << " Title: " << title << '\n';
+
 			pair<int,string> group = make_pair(number, title);
 			newsgroups.push_back(group);
 		}
 
 		if (readCommand(conn) != Protocol::ANS_END) {
+			std::cout << "HANDLER: Something was wrong" << '\n';
 			return vector<pair<int,string>>();
 		}
-	}
-
-	if (readCommand(conn) != Protocol::ANS_END) {
-		std::cout << "Problem with message... terminating" << '\n';
-		exit(1);
 	}
 
 	return newsgroups;
@@ -280,11 +280,10 @@ vector<pair<int, string>> MessageHandler::clientListArticles(const Connection& c
 							int title_size = readNumber(conn);
 							title = readString(conn, title_size);
 						}
-
 						articles.push_back(make_pair(number, title));
 					}
 				}
-			} else {
+			} else if (command == Protocol::ANS_NAK){
 				command = readCommand(conn);
 				if (command == Protocol::ERR_NG_DOES_NOT_EXIST) {
 					std::cout << "Failed... No Newsgroup with that ID!" << '\n';
@@ -369,6 +368,8 @@ Article MessageHandler::clientGetArticle(const Connection& conn, int ng_id, int 
 	writeNumber(conn, ng_id);
 	writeNumber(conn, art_id);
 	writeCommand(conn, Protocol::COM_END);
+
+	std::cout << "HANDLER: Request sent to server..." << '\n';
 
 	//Receive result from server
 

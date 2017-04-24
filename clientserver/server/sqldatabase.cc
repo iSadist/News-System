@@ -10,20 +10,10 @@
 using namespace std;
 
 Sqldatabase::Sqldatabase() {
-  open_connection("Database.db");
-
-  sqlite3_stmt *statement;
-  std::string sql = "SELECT id FROM articles ORDER BY id DESC LIMIT 1";
-  char *query = &sql[0];
-  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
-    article_counter = sqlite3_column_int(statement, 0) + 1;
-  } else {
-    article_counter = 1;
-  }
+  std::cout << "SQL Database opened" << '\n';
 }
 
 Sqldatabase::~Sqldatabase(){
-  close_connection();
   std::cout << "SQL Database closed..." << '\n';
 }
 
@@ -34,6 +24,15 @@ bool Sqldatabase::open_connection(std::string filepath) {
   }else{
     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
     return false;
+  }
+
+  sqlite3_stmt *statement;
+  std::string sql = "SELECT id FROM articles ORDER BY id DESC LIMIT 1";
+  char *query = &sql[0];
+  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
+    article_counter = sqlite3_column_int(statement, 0) + 1;
+  } else {
+    article_counter = 1;
   }
 }
 
@@ -84,6 +83,7 @@ std::vector<Newsgroup> Sqldatabase::list_NG() {
   char *query = &sql[0];
 
   if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK) {
+    std::cout << "SQL: Listing newsgroups" << '\n';
 
     while (sqlite3_step(statement) == SQLITE_ROW) {
        int id = sqlite3_column_int(statement, 0);
@@ -156,6 +156,8 @@ std::vector<Article> Sqldatabase::list_ART(int ng_id) {
        Article art(id, title, author,content);
        articles.push_back(art);
     }
+  } else {
+    articles.push_back(Article(0, "null", "null", "null"));
   }
 
   return articles;
@@ -176,13 +178,24 @@ bool Sqldatabase::create_ART(int ng_id, std::string title, std::string author, s
 MUST BE FIXED TO RETURN 1 ON SUCCESS 0 ON NO SUCH NG_ID and -1 on NO SUCH ART_ID
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 int Sqldatabase::delete_ART(int ng_id, int art_id) {
+  sqlite3_stmt *statement;
+  std::ostringstream s2;
+  s2 << "SELECT * FROM newsgroups "
+     << "WHERE id = " << ng_id;
+  std::string sql2(s2.str());
+  char *query = &sql2[0];
+
+  if(sqlite3_prepare_v2(db, query, -1, &statement, 0) != SQLITE_OK) {
+    return 0;
+  }
+
   std::ostringstream s;
   s << "DELETE FROM articles " <<
        "WHERE       id = " << art_id <<
        " AND        newsgroup = " << ng_id;
   std::string sql(s.str());
-//  return executeSQL(sql);
-  return -1;
+
+  return executeSQL(sql) ? 1 : -1;
 }
 
 
@@ -191,8 +204,20 @@ int Sqldatabase::delete_ART(int ng_id, int art_id) {
 MUST BE FIXED SO RETURN ARTICLE ID IS 0 ON NO SUCH NG_ID and -1 on NO SUCH ART_ID
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 Article Sqldatabase::get_ART(int ng_id, int art_id) {
-  sqlite3_stmt *statement;
+  sqlite3_stmt *statement2;
+  std::ostringstream s2;
 
+  s2 << "SELECT * FROM newsgroups "
+     << "WHERE id = " << ng_id;
+
+  std::string sql2(s2.str());
+  char *query2 = &sql2[0];
+
+  if(sqlite3_prepare_v2(db, query2, -1, &statement2, 0) != SQLITE_OK) {
+    return Article(0,"null","null","null");
+  }
+
+  sqlite3_stmt *statement;
   std::ostringstream s;
 
   s << "SELECT id,title,author,content FROM articles " <<

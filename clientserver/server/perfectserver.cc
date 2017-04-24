@@ -17,9 +17,10 @@ using namespace std;
 PerfectServer::PerfectServer(int port) : server(port){
 	msg_hand = MessageHandler();
 	#ifdef SQL
-	db = Sqldatabase();
+	db = new Sqldatabase();
+	db->open_connection("Database.db");
 	#else
-	db = Memdatabase();
+	db = new Memdatabase();
 	#endif
 	if (!server.isReady()) {
 		cerr << "Server initialization error." << endl;
@@ -33,25 +34,25 @@ PerfectServer::~PerfectServer(){}
 void PerfectServer::handle_message(shared_ptr<Connection>& conn, Message& message){
 	switch (message.type) {
 		case Protocol::COM_LIST_NG:
-			msg_hand.server_send_ng_list(*conn, db.list_NG());
+			msg_hand.server_send_ng_list(*conn, db->list_NG());
 			break;
 		case Protocol::COM_CREATE_NG:
-			msg_hand.server_send_ng_create_response(*conn, db.create_NG(message.contents[0]));
+			msg_hand.server_send_ng_create_response(*conn, db->create_NG(message.contents[0]));
 			break;
 		case Protocol::COM_DELETE_NG:
-			msg_hand.server_send_ng_delete_response(*conn, db.delete_NG(stoi(message.contents[0])));
+			msg_hand.server_send_ng_delete_response(*conn, db->delete_NG(stoi(message.contents[0])));
 			break;
 		case Protocol::COM_LIST_ART:
-			msg_hand.server_send_ng_art_list(*conn, db.list_ART(stoi(message.contents[0])));
+			msg_hand.server_send_ng_art_list(*conn, db->list_ART(stoi(message.contents[0])));
 			break;
 		case Protocol::COM_CREATE_ART:
-			msg_hand.server_send_art_create_response(*conn, db.create_ART(stoi(message.contents[0]), message.contents[1], message.contents[2], message.contents[3]));
+			msg_hand.server_send_art_create_response(*conn, db->create_ART(stoi(message.contents[0]), message.contents[1], message.contents[2], message.contents[3]));
 			break;
 		case Protocol::COM_DELETE_ART:
-			msg_hand.server_send_art_delete_response(*conn, db.delete_ART(stoi(message.contents[0]), stoi(message.contents[1])));
+			msg_hand.server_send_art_delete_response(*conn, db->delete_ART(stoi(message.contents[0]), stoi(message.contents[1])));
 			break;
 		case Protocol::COM_GET_ART:
-			msg_hand.server_send_article(*conn, db.get_ART(stoi(message.contents[0]), stoi(message.contents[1])));
+			msg_hand.server_send_article(*conn, db->get_ART(stoi(message.contents[0]), stoi(message.contents[1])));
 			break;
 		case -1:
 			server.deregisterConnection(conn);
