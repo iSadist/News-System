@@ -1,7 +1,7 @@
 all:
 	cd ./src && make
 	cd ./src/client && make
-	cd ./src/server && make && mv perfectserver memoryserver
+	cd ./src/server && make && mv perfectserver memoryserver && make clean
 	cd ./src/server && make db=-DSQL && mv perfectserver sqlserver
 
 install:

@@ -32,7 +32,7 @@ dbtest: memdatabase.o sqldatabase.o newsgroup.o article.o
 
 # Standard clean
 clean:
-	rm -f *.o $(PROGS) memoryserver sqlserver
+	rm -f *.o $(PROGS)
 
 # Generate dependencies in *.d files
 %.d: %.cc
