@@ -30,7 +30,7 @@ bool Sqldatabase::open_connection(std::string filepath) {
   std::string sql = "SELECT id FROM articles ORDER BY id DESC LIMIT 1";
   char *query = &sql[0];
   if(sqlite3_prepare_v2(db, query, -1, &statement, 0) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
-    article_counter = sqlite3_column_int(statement, 0) + 1;
+    article_counter = sqlite3_column_int(statement, 1) + 1;
   } else {
     article_counter = 1;
   }
