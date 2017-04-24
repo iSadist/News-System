@@ -6,31 +6,33 @@ CC  = g++
 
 # Define preprocessor, compiler, and linker flags. Uncomment the # lines
 # if you use clang++ and wish to use libc++ instead of libstd++.
-CPPFLAGS  = -std=c++11 -I.. -I../server
+CPPFLAGS  = -std=c++11 -I.. -I. $(db)
 CXXFLAGS  = -g -O2 -Wall -W -pedantic-errors
 CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
 CXXFLAGS += -std=c++11
 LDFLAGS   = -g -L..
 
 # Libraries
-LDLIBS = -lclientserver
+LDLIBS = -lclientserver -lsqlite3
 
 # Targets
-PROGS = client
+PROGS = perfectserver
 
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
 
-client: client.o ../messagehandler.o ../server/article.o ../server/newsgroup.o
+perfectserver: perfectserver.o article.o newsgroup.o memdatabase.o sqldatabase.o ../messagehandler.o
+
+dbtest: memdatabase.o sqldatabase.o newsgroup.o article.o
 
 # Phony targets
 .PHONY: all clean
 
 # Standard clean
 clean:
-	rm -f *.o $(PROGS)
+	rm -f *.o $(PROGS) memoryserver sqlserver
 
 # Generate dependencies in *.d files
 %.d: %.cc
