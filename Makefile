@@ -10,6 +10,8 @@ install:
 	cd ./src/server && mv sqlserver ../../bin/
 	cd ./src/server && sqlite3 Database.db < SQLDatabase.sql && mv Database.db ../../bin
 
+test: clean all install
+
 # Phony targets
 .PHONY: all clean
 
