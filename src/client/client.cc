@@ -88,7 +88,6 @@ void Client::listNewsgroups() {
 
   vector<pair<int,string>> v = message_handler->clientListNewsgroups(*conn);
 
-  std::cout << "Vector was filled" << '\n';
   for(pair<int,string> p : v) {
     std::cout << p.first << ". " << p.second << '\n';
   }
